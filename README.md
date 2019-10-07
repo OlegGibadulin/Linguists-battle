@@ -3,4 +3,4 @@ Swift application
 
 iOS technopark project
 
-![Alt text](/ui.prototype.jpg?raw=true "Optional Title")
+![Alt text](/prototype-ui.jpg?raw=true "Optional Title")
