@@ -8,6 +8,7 @@ target 'lb' do
   # Pods for lb
   pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
+  pod 'Firebase/Core'
   pod 'Firebase/Firestore'
 
 end

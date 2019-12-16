@@ -203,7 +203,7 @@
         <!--Home View Controller-->
         <scene sceneID="3GV-EK-qAI">
             <objects>
-                <viewController id="m92-9Y-lLM" customClass="HomeViewController" customModule="lb" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeController" id="m92-9Y-lLM" customClass="HomeViewController" customModule="lb" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ME2-P0-nIt">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,6 +19,7 @@
 		C4A70E8F23A764EB007BDB21 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E8E23A764EB007BDB21 /* HomeViewController.swift */; };
 		C4A70E9223A77014007BDB21 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E9123A77014007BDB21 /* Utilities.swift */; };
 		C4A70E9523A780EC007BDB21 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4A70E9423A780EC007BDB21 /* GoogleService-Info.plist */; };
+		C4A70E9723A79269007BDB21 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E9623A79269007BDB21 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		C4A70E8E23A764EB007BDB21 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		C4A70E9123A77014007BDB21 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		C4A70E9423A780EC007BDB21 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C4A70E9623A79269007BDB21 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F8BA1C89B7782B0761CA2E39 /* Pods-lb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lb.release.xcconfig"; path = "Target Support Files/Pods-lb/Pods-lb.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				C4A70E9123A77014007BDB21 /* Utilities.swift */,
+				C4A70E9623A79269007BDB21 /* Constants.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -119,7 +122,6 @@
 				8D23421E47E03E15F01321D9 /* Pods-lb.debug.xcconfig */,
 				F8BA1C89B7782B0761CA2E39 /* Pods-lb.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -246,6 +248,7 @@
 				C4A70E8D23A764E2007BDB21 /* LoginViewController.swift in Sources */,
 				C4A70E7923A76459007BDB21 /* SceneDelegate.swift in Sources */,
 				C4A70E8F23A764EB007BDB21 /* HomeViewController.swift in Sources */,
+				C4A70E9723A79269007BDB21 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
