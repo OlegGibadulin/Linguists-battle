@@ -14,4 +14,9 @@ struct Constants {
         
         static let homeTableViewController = "HomeController"
     }
+    
+    struct User {
+        
+        static var id: String?
+    }
 }

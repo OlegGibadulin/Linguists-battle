@@ -64,7 +64,7 @@ class LoginViewController: UIViewController {
         // Check the fields
         let error = checkFields()
         
-        if error != nil {
+        guard error == nil else {
             self.showError(error!)
             return
         }
@@ -75,11 +75,14 @@ class LoginViewController: UIViewController {
         
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             
-            if error != nil {
+            if error != nil || result == nil {
                 // error!.localizedDescription
                 self.showError("Неверный email или пароль")
             }
             else {
+                // Store user id
+                Constants.User.id = result!.user.uid
+                
                 // Transition to the home screen
                 self.goToHomeScreen()
             }

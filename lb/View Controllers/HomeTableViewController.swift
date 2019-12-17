@@ -24,7 +24,7 @@ class HomeTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         setUpElements()
-        setUpNickname()
+        fillNicknameLabel()
     }
     
     func setUpElements() {
@@ -32,8 +32,23 @@ class HomeTableViewController: UITableViewController {
         Utilities.styleFilledButton(findGameButton)
     }
     
-    func setUpNickname() {
+    // Set user nickname into label
+    func fillNicknameLabel() {
+        let db = Firestore.firestore()
         
+        db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
+            
+            guard error != nil && snapshot == nil else { return }
+            
+            for documents in snapshot!.documents {
+                
+                let documentData = documents.data()
+                
+                if let nickname = documentData["nickname"] {
+                    self.nicknameLabel.text = "Hello, " + (nickname as! String)
+                }
+            }
+        }
     }
 
     @IBAction func findGameTapped(_ sender: Any) {
