@@ -63,7 +63,7 @@ class SignUpViewController: UIViewController {
     
     // Transition to the home screen
     func goToHomeScreen() {
-        let homeViewController =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as? HomeViewController
+        let homeViewController =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeTableViewController) as? HomeTableViewController
         
         view.window?.rootViewController = homeViewController
         view.window?.makeKeyAndVisible()

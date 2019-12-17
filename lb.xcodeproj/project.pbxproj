@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7755A6B99AE37780E0AE5805 /* Pods_lb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85133CE037645976BD097C91 /* Pods_lb.framework */; };
+		C4723B4F23A871E200EEB439 /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4723B4E23A871E200EEB439 /* HomeTableViewController.swift */; };
 		C4A70E7723A76459007BDB21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E7623A76459007BDB21 /* AppDelegate.swift */; };
 		C4A70E7923A76459007BDB21 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E7823A76459007BDB21 /* SceneDelegate.swift */; };
 		C4A70E7B23A76459007BDB21 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E7A23A76459007BDB21 /* ViewController.swift */; };
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		85133CE037645976BD097C91 /* Pods_lb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_lb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D23421E47E03E15F01321D9 /* Pods-lb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lb.debug.xcconfig"; path = "Target Support Files/Pods-lb/Pods-lb.debug.xcconfig"; sourceTree = "<group>"; };
+		C4723B4E23A871E200EEB439 /* HomeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		C4A70E7323A76459007BDB21 /* lb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4A70E7623A76459007BDB21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4A70E7823A76459007BDB21 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				C4A70E8E23A764EB007BDB21 /* HomeViewController.swift */,
 				C4A70E8C23A764E2007BDB21 /* LoginViewController.swift */,
 				C4A70E8A23A764D3007BDB21 /* SignUpViewController.swift */,
+				C4723B4E23A871E200EEB439 /* HomeTableViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 				C4A70E8B23A764D3007BDB21 /* SignUpViewController.swift in Sources */,
 				C4A70E8D23A764E2007BDB21 /* LoginViewController.swift in Sources */,
 				C4A70E7923A76459007BDB21 /* SceneDelegate.swift in Sources */,
+				C4723B4F23A871E200EEB439 /* HomeTableViewController.swift in Sources */,
 				C4A70E8F23A764EB007BDB21 /* HomeViewController.swift in Sources */,
 				C4A70E9723A79269007BDB21 /* Constants.swift in Sources */,
 			);
