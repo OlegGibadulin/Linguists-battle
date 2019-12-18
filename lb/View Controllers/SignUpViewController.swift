@@ -74,7 +74,7 @@ class SignUpViewController: UIViewController {
         // Check the fields
         let error = checkFields()
         
-        if error != nil {
+        guard error == nil else {
             self.showError(error!)
             return
         }
@@ -87,21 +87,25 @@ class SignUpViewController: UIViewController {
         // Create the user
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
             
-            if error != nil {
+            guard error == nil else {
                 self.showError("Ошибка создания аккаунта")
+                return
             }
-            else {
-                let db = Firestore.firestore()
+            
+            let db = Firestore.firestore()
+            let gamesDict: [[String:Any]] = []
+            
+            db.collection("users").addDocument(data: ["nickname": nickname, "uid": result!.user.uid, "games": gamesDict]) { (error) in
                 
-                db.collection("users").addDocument(data: ["nickname": nickname, "uid": result!.user.uid]) { (error) in
+                if error != nil {
+                    self.showError("Ошибка создания аккаунта")
+                }
+                else {
+                    // Store user id
+                    Constants.User.id = result!.user.uid
                     
-                    if error != nil {
-                        self.showError("Ошибка создания аккаунта")
-                    }
-                    else {
-                        // Transition to the home screen
-                        self.goToHomeScreen()
-                    }
+                    // Transition to the home screen
+                    self.goToHomeScreen()
                 }
             }
         }
