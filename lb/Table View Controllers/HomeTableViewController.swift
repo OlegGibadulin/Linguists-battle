@@ -15,7 +15,8 @@ class HomeTableViewController: UITableViewController {
     @IBOutlet weak var findGameButton: UIButton!
     
     var db: Firestore!
-    var gamesList: [String] = []
+    var gamesList: [[String:Any]] = []
+    var nickname: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +49,7 @@ class HomeTableViewController: UITableViewController {
             
             if let nickname = userData["nickname"] {
                 self.nicknameLabel.text = "Hello, " + (nickname as! String)
+                self.nickname = nickname as! String
             }
         }
     }
@@ -61,7 +63,7 @@ class HomeTableViewController: UITableViewController {
             let userData = snapshot!.documents[0].data()
             
             if let games = userData["games"] {
-                self.gamesList = games as! [String]
+                self.gamesList = games as! [[String:Any]]
                 
                 self.tableView.reloadData()
             }
@@ -76,7 +78,7 @@ class HomeTableViewController: UITableViewController {
             
             guard error == nil && snapshot != nil else { return }
             
-            var opponentID = ""
+            var opponent: [String:Any] = ["nickname":"", "uid":""]
             var opponentInd = 0
             var opponentData: [String:Any] = [:]
             var isNotFounded = true
@@ -84,20 +86,22 @@ class HomeTableViewController: UITableViewController {
             while isNotFounded {
                 isNotFounded = false
                 
+                // Get random opponent
                 opponentInd = Int.random(in: 0 ..< snapshot!.documents.count)
                 opponentData = snapshot!.documents[opponentInd].data()
                 
-                opponentID = opponentData["uid"] as! String
+                opponent["nickname"] = opponentData["nickname"] as! String
+                opponent["uid"] = opponentData["uid"] as! String
                 
                 // Check for user
-                if opponentID == Constants.User.id! {
+                if opponent["uid"] as! String == Constants.User.id! {
                     isNotFounded = true
                     continue
                 }
                 
                 // Check for repeated opponent
-                for curUserOpponentID in self.gamesList {
-                    if opponentID == curUserOpponentID {
+                for curUserOpponent in self.gamesList {
+                    if opponent["uid"] as! String == curUserOpponent["uid"] as! String {
                         isNotFounded = true
                         break
                     }
@@ -105,15 +109,15 @@ class HomeTableViewController: UITableViewController {
             }
             
             // Add user ID to opponent list of games
-            if var games = opponentData["games"] as! [String]? {
+            if var games = opponentData["games"] as! [[String:Any]]? {
                 let document = snapshot!.documents[opponentInd]
                     
-                games.append(Constants.User.id!)
+                games.append(["nickname": self.nickname, "uid": Constants.User.id!])
             self.db.collection("users").document(document.documentID).setData(["games" : games], merge: true)
             }
             
             // Add opponent ID to user list of games
-            self.gamesList.append(opponentID)
+            self.gamesList.append(opponent)
             
             self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
                 
@@ -143,7 +147,7 @@ class HomeTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! HomeTableViewCell
         
-        cell.setData(gamesList[indexPath.row])
+        cell.setData(gamesList[indexPath.row]["nickname"] as! String)
 
         return cell
     }
@@ -164,7 +168,7 @@ class HomeTableViewController: UITableViewController {
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
     */
 
@@ -194,3 +198,4 @@ class HomeTableViewController: UITableViewController {
     */
 
 }
+
