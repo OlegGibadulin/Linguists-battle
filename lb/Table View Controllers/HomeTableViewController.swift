@@ -14,6 +14,9 @@ class HomeTableViewController: UITableViewController {
     
     @IBOutlet weak var findGameButton: UIButton!
     
+    var db: Firestore!
+    var gamesList: [String] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,30 +26,43 @@ class HomeTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
+        db = Firestore.firestore()
+        
         setUpElements()
         fillNicknameLabel()
+        loadData()
     }
     
     func setUpElements() {
-        
         Utilities.styleFilledButton(findGameButton)
     }
     
     // Set user nickname into label
     func fillNicknameLabel() {
-        let db = Firestore.firestore()
         
         db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
             
-            guard error != nil && snapshot == nil else { return }
+            guard error == nil && snapshot != nil else { return }
             
-            for documents in snapshot!.documents {
+            let documentData = snapshot!.documents[0].data()
+            
+            if let nickname = documentData["nickname"] {
+                self.nicknameLabel.text = "Hello, " + (nickname as! String)
+            }
+        }
+    }
+    
+    func loadData() {
+        db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
+            
+            guard error == nil && snapshot != nil else { return }
+            
+            let documentData = snapshot!.documents[0].data()
+            
+            if let games = documentData["games"] {
+                self.gamesList = games as! [String]
                 
-                let documentData = documents.data()
-                
-                if let nickname = documentData["nickname"] {
-                    self.nicknameLabel.text = "Hello, " + (nickname as! String)
-                }
+                self.tableView.reloadData()
             }
         }
     }
@@ -57,24 +73,23 @@ class HomeTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        
+        return gamesList.count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! HomeTableViewCell
+        
+        cell.setData(gamesList[indexPath.row])
 
         return cell
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.

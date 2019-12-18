@@ -93,8 +93,9 @@ class SignUpViewController: UIViewController {
             }
             
             let db = Firestore.firestore()
+            let emptyArr: [String] = []
             
-            db.collection("users").addDocument(data: ["nickname": nickname, "uid": result!.user.uid]) { (error) in
+            db.collection("users").addDocument(data: ["nickname": nickname, "uid": result!.user.uid, "games": emptyArr]) { (error) in
                 
                 if error != nil {
                     self.showError("Ошибка создания аккаунта")

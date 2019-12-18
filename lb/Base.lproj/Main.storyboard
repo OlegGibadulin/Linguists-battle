@@ -331,7 +331,7 @@
                                                 <constraint firstAttribute="width" constant="20" id="yO0-vt-vu9"/>
                                             </constraints>
                                         </stackView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="zaq-5C-ip6">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="zaq-5C-ip6">
                                             <rect key="frame" x="20" y="0.0" width="374" height="60"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                             <nil key="textColor"/>
@@ -348,20 +348,26 @@
                                         <constraint firstAttribute="height" constant="60" id="qaz-iS-I0a"/>
                                     </constraints>
                                 </stackView>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="o5M-XI-jpj">
-                                    <rect key="frame" x="0.0" y="60" width="414" height="190"/>
+                                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Q2B-26-jOw">
+                                    <rect key="frame" x="0.0" y="60" width="414" height="0.0"/>
                                 </stackView>
-                                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZXs-Af-Nf7">
-                                    <rect key="frame" x="0.0" y="250" width="414" height="50"/>
+                                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="9z1-FW-CsE">
+                                    <rect key="frame" x="0.0" y="60" width="414" height="100"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="100" id="jyu-NO-bvv"/>
+                                    </constraints>
+                                </stackView>
+                                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZXs-Af-Nf7">
+                                    <rect key="frame" x="0.0" y="160" width="414" height="70"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2La-o5-Dg2">
-                                            <rect key="frame" x="0.0" y="0.0" width="20" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="20" height="70"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="20" id="0KQ-Yv-50p"/>
                                             </constraints>
                                         </stackView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iwR-TX-N5S">
-                                            <rect key="frame" x="20" y="0.0" width="374" height="50"/>
+                                            <rect key="frame" x="20" y="0.0" width="374" height="70"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                             <state key="normal" title="Найти игру"/>
                                             <connections>
@@ -369,17 +375,23 @@
                                             </connections>
                                         </button>
                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WRj-fx-439">
-                                            <rect key="frame" x="394" y="0.0" width="20" height="50"/>
+                                            <rect key="frame" x="394" y="0.0" width="20" height="70"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="20" id="277-46-t5t"/>
                                             </constraints>
                                         </stackView>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="70" id="K5r-Hp-Bcr"/>
+                                    </constraints>
+                                </stackView>
+                                <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="elX-YO-Wdp">
+                                    <rect key="frame" x="0.0" y="230" width="414" height="70"/>
                                 </stackView>
                             </subviews>
                         </stackView>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="100" id="jWc-57-9ZM">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="GameCell" rowHeight="100" id="jWc-57-9ZM" customClass="HomeTableViewCell" customModule="lb" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="328" width="414" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jWc-57-9ZM" id="DmK-Oc-hb5">
@@ -405,6 +417,9 @@
                                         <constraint firstAttribute="trailing" secondItem="ACu-F8-2ST" secondAttribute="trailing" constant="20" id="nJR-ov-8aD"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="nicknameLabel" destination="6gE-V1-wNE" id="iF0-iF-hI2"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
