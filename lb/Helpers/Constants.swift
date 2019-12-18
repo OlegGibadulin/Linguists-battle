@@ -13,6 +13,8 @@ struct Constants {
     struct Storyboard {
         
         static let homeTableViewController = "HomeController"
+        
+        static let gameViewController = "GameController"
     }
     
     struct User {

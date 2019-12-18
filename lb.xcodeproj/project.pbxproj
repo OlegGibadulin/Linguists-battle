@@ -18,7 +18,7 @@
 		C4A70E8323A7645C007BDB21 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4A70E8123A7645C007BDB21 /* LaunchScreen.storyboard */; };
 		C4A70E8B23A764D3007BDB21 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E8A23A764D3007BDB21 /* SignUpViewController.swift */; };
 		C4A70E8D23A764E2007BDB21 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E8C23A764E2007BDB21 /* LoginViewController.swift */; };
-		C4A70E8F23A764EB007BDB21 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E8E23A764EB007BDB21 /* HomeViewController.swift */; };
+		C4A70E8F23A764EB007BDB21 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E8E23A764EB007BDB21 /* GameViewController.swift */; };
 		C4A70E9223A77014007BDB21 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E9123A77014007BDB21 /* Utilities.swift */; };
 		C4A70E9523A780EC007BDB21 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4A70E9423A780EC007BDB21 /* GoogleService-Info.plist */; };
 		C4A70E9723A79269007BDB21 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E9623A79269007BDB21 /* Constants.swift */; };
@@ -39,7 +39,7 @@
 		C4A70E8423A7645C007BDB21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4A70E8A23A764D3007BDB21 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		C4A70E8C23A764E2007BDB21 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		C4A70E8E23A764EB007BDB21 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		C4A70E8E23A764EB007BDB21 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		C4A70E9123A77014007BDB21 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		C4A70E9423A780EC007BDB21 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C4A70E9623A79269007BDB21 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				C4A70E7A23A76459007BDB21 /* ViewController.swift */,
-				C4A70E8E23A764EB007BDB21 /* HomeViewController.swift */,
+				C4A70E8E23A764EB007BDB21 /* GameViewController.swift */,
 				C4A70E8C23A764E2007BDB21 /* LoginViewController.swift */,
 				C4A70E8A23A764D3007BDB21 /* SignUpViewController.swift */,
 			);
@@ -263,7 +263,7 @@
 				C4A70E7923A76459007BDB21 /* SceneDelegate.swift in Sources */,
 				C4A285AB23A9B8DB0040C53E /* HomeTableViewCell.swift in Sources */,
 				C4723B4F23A871E200EEB439 /* HomeTableViewController.swift in Sources */,
-				C4A70E8F23A764EB007BDB21 /* HomeViewController.swift in Sources */,
+				C4A70E8F23A764EB007BDB21 /* GameViewController.swift in Sources */,
 				C4A70E9723A79269007BDB21 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

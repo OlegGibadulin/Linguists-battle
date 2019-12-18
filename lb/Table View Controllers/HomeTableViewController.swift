@@ -151,6 +151,15 @@ class HomeTableViewController: UITableViewController {
 
         return cell
     }
+    
+    // Transition to the game screen
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let gameViewController =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.gameViewController) as? GameViewController
+        
+        view.window?.rootViewController = gameViewController
+        view.window?.makeKeyAndVisible()
+    }
 
     /*
     // Override to support conditional editing of the table view.
