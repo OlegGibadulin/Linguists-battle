@@ -30,7 +30,7 @@ class HomeTableViewController: UITableViewController {
         
         setUpElements()
         fillNicknameLabel()
-        loadData()
+        loadGamesList()
     }
     
     func setUpElements() {
@@ -44,22 +44,23 @@ class HomeTableViewController: UITableViewController {
             
             guard error == nil && snapshot != nil else { return }
             
-            let documentData = snapshot!.documents[0].data()
+            let userData = snapshot!.documents[0].data()
             
-            if let nickname = documentData["nickname"] {
+            if let nickname = userData["nickname"] {
                 self.nicknameLabel.text = "Hello, " + (nickname as! String)
             }
         }
     }
     
-    func loadData() {
+    // Load list of current games of user
+    func loadGamesList() {
         db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
             
             guard error == nil && snapshot != nil else { return }
             
-            let documentData = snapshot!.documents[0].data()
+            let userData = snapshot!.documents[0].data()
             
-            if let games = documentData["games"] {
+            if let games = userData["games"] {
                 self.gamesList = games as! [String]
                 
                 self.tableView.reloadData()
@@ -67,7 +68,63 @@ class HomeTableViewController: UITableViewController {
         }
     }
 
+    // Find new opponent for game
     @IBAction func findGameTapped(_ sender: Any) {
+        
+        // Looking for new opponent
+        db.collection("users").getDocuments { (snapshot, error) in
+            
+            guard error == nil && snapshot != nil else { return }
+            
+            var opponentID = ""
+            var opponentInd = 0
+            var opponentData: [String:Any] = [:]
+            var isNotFounded = true
+            
+            while isNotFounded {
+                isNotFounded = false
+                
+                opponentInd = Int.random(in: 0 ..< snapshot!.documents.count)
+                opponentData = snapshot!.documents[opponentInd].data()
+                
+                opponentID = opponentData["uid"] as! String
+                
+                // Check for user
+                if opponentID == Constants.User.id! {
+                    isNotFounded = true
+                    continue
+                }
+                
+                // Check for repeated opponent
+                for curUserOpponentID in self.gamesList {
+                    if opponentID == curUserOpponentID {
+                        isNotFounded = true
+                        break
+                    }
+                }
+            }
+            
+            // Add user ID to opponent list of games
+            if var games = opponentData["games"] as! [String]? {
+                let document = snapshot!.documents[opponentInd]
+                    
+                games.append(Constants.User.id!)
+            self.db.collection("users").document(document.documentID).setData(["games" : games], merge: true)
+            }
+            
+            // Add opponent ID to user list of games
+            self.gamesList.append(opponentID)
+            
+            self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
+                
+                guard error == nil && snapshot != nil else { return }
+                
+                let document = snapshot!.documents[0]
+            self.db.collection("users").document(document.documentID).setData(["games" : self.gamesList], merge: true)
+                
+                self.tableView.reloadData()
+            }
+        }
     }
     
     // MARK: - Table view data source

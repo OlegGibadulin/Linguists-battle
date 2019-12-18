@@ -20,7 +20,6 @@ class HomeTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-        print("Cell selected")
     }
     
     func setData(_ nickname: String) {
