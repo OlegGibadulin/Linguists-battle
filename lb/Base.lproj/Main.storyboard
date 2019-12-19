@@ -288,14 +288,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="FCA-bE-hoj">
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="FCA-bE-hoj">
                                 <rect key="frame" x="20" y="84" width="374" height="738"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="rIr-eE-pJG">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="349"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="324"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Question" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="Nkc-d6-xgJ">
-                                                <rect key="frame" x="0.0" y="0.0" width="374" height="349"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="374" height="324"/>
                                                 <color key="backgroundColor" systemColor="systemYellowColor" red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                                 <nil key="textColor"/>
@@ -304,79 +304,65 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C0N-aH-n8j">
-                                        <rect key="frame" x="0.0" y="349" width="374" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="TMm-sf-ZOo"/>
-                                        </constraints>
-                                    </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="16f-xH-sbg">
-                                        <rect key="frame" x="0.0" y="389" width="374" height="349"/>
+                                        <rect key="frame" x="0.0" y="344" width="374" height="50"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8tF-9P-Kol">
-                                                <rect key="frame" x="0.0" y="0.0" width="374" height="119.5"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8x9-Kw-evL">
-                                                        <rect key="frame" x="0.0" y="0.0" width="177" height="119.5"/>
-                                                        <state key="normal" title="Answer 1"/>
-                                                        <connections>
-                                                            <action selector="answerTapped:" destination="b5T-yj-Hru" eventType="touchUpInside" id="on5-LF-W50"/>
-                                                        </connections>
-                                                    </button>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hek-4d-FbH">
-                                                        <rect key="frame" x="177" y="0.0" width="20" height="119.5"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="20" id="8Xq-Xc-K9F"/>
-                                                        </constraints>
-                                                    </stackView>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V0D-rd-k6o">
-                                                        <rect key="frame" x="197" y="0.0" width="177" height="119.5"/>
-                                                        <state key="normal" title="Answer 2"/>
-                                                        <connections>
-                                                            <action selector="answerTapped:" destination="b5T-yj-Hru" eventType="touchUpInside" id="3vN-PS-OeS"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="V0D-rd-k6o" firstAttribute="width" secondItem="8x9-Kw-evL" secondAttribute="width" id="WVv-cO-s5U"/>
-                                                </constraints>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Lv9-Mn-gsX">
+                                                <rect key="frame" x="0.0" y="0.0" width="124.5" height="50"/>
                                             </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GZS-S1-oTQ">
-                                                <rect key="frame" x="0.0" y="159.5" width="374" height="30"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="30" id="Pvg-qS-Fr0"/>
-                                                </constraints>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wvc-Wg-TFM">
-                                                <rect key="frame" x="0.0" y="229.5" width="374" height="119.5"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rjH-m6-6Tz">
-                                                        <rect key="frame" x="0.0" y="0.0" width="177" height="119.5"/>
-                                                        <state key="normal" title="Answer 3"/>
-                                                        <connections>
-                                                            <action selector="answerTapped:" destination="b5T-yj-Hru" eventType="touchUpInside" id="6FK-4t-NqX"/>
-                                                        </connections>
-                                                    </button>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="auu-TZ-lpQ">
-                                                        <rect key="frame" x="177" y="0.0" width="20" height="119.5"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="20" id="FFk-7w-fbW"/>
-                                                        </constraints>
-                                                    </stackView>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aRb-bQ-Eb5">
-                                                        <rect key="frame" x="197" y="0.0" width="177" height="119.5"/>
-                                                        <state key="normal" title="Answer 4"/>
-                                                        <connections>
-                                                            <action selector="answerTapped:" destination="b5T-yj-Hru" eventType="touchUpInside" id="uCG-Px-xU4"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="aRb-bQ-Eb5" firstAttribute="width" secondItem="rjH-m6-6Tz" secondAttribute="width" id="Hg2-ZF-qSP"/>
-                                                </constraints>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="erh-S3-030">
+                                                <rect key="frame" x="124.5" y="0.0" width="125" height="50"/>
+                                                <state key="normal" title="Next"/>
+                                                <connections>
+                                                    <action selector="nextQestionTapped:" destination="b5T-yj-Hru" eventType="touchUpInside" id="OcO-qA-zuV"/>
+                                                </connections>
+                                            </button>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="2KS-6G-qcP">
+                                                <rect key="frame" x="249.5" y="0.0" width="124.5" height="50"/>
                                             </stackView>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="wvc-Wg-TFM" firstAttribute="height" secondItem="8tF-9P-Kol" secondAttribute="height" id="eXu-1I-7MS"/>
+                                            <constraint firstItem="2KS-6G-qcP" firstAttribute="width" secondItem="Lv9-Mn-gsX" secondAttribute="width" id="BpC-T2-kdU"/>
+                                            <constraint firstAttribute="height" constant="50" id="TMm-sf-ZOo"/>
+                                            <constraint firstItem="erh-S3-030" firstAttribute="width" secondItem="Lv9-Mn-gsX" secondAttribute="width" id="hn4-Kz-qgb"/>
+                                        </constraints>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="16f-xH-sbg">
+                                        <rect key="frame" x="0.0" y="414" width="374" height="324"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8x9-Kw-evL">
+                                                <rect key="frame" x="0.0" y="0.0" width="374" height="66"/>
+                                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
+                                                <state key="normal" title="Answer 1"/>
+                                                <connections>
+                                                    <action selector="answerTapped:" destination="b5T-yj-Hru" eventType="touchUpInside" id="Z70-Is-Vc4"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V0D-rd-k6o">
+                                                <rect key="frame" x="0.0" y="86" width="374" height="66"/>
+                                                <state key="normal" title="Answer 2"/>
+                                                <connections>
+                                                    <action selector="answerTapped:" destination="b5T-yj-Hru" eventType="touchUpInside" id="CJY-op-z1D"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rjH-m6-6Tz">
+                                                <rect key="frame" x="0.0" y="172" width="374" height="66"/>
+                                                <state key="normal" title="Answer 3"/>
+                                                <connections>
+                                                    <action selector="answerTapped:" destination="b5T-yj-Hru" eventType="touchUpInside" id="XBV-Xc-RdR"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aRb-bQ-Eb5">
+                                                <rect key="frame" x="0.0" y="258" width="374" height="66"/>
+                                                <state key="normal" title="Answer 4"/>
+                                                <connections>
+                                                    <action selector="answerTapped:" destination="b5T-yj-Hru" eventType="touchUpInside" id="nPG-YD-aXh"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="rjH-m6-6Tz" firstAttribute="height" secondItem="8x9-Kw-evL" secondAttribute="height" id="Ipg-b2-tHF"/>
+                                            <constraint firstItem="aRb-bQ-Eb5" firstAttribute="height" secondItem="8x9-Kw-evL" secondAttribute="height" id="w1V-Vr-aVl"/>
+                                            <constraint firstItem="V0D-rd-k6o" firstAttribute="height" secondItem="8x9-Kw-evL" secondAttribute="height" id="w7H-5j-ioA"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>
@@ -395,6 +381,7 @@
                         <viewLayoutGuide key="safeArea" id="xpX-sT-x1o"/>
                     </view>
                     <connections>
+                        <outlet property="nextQestionButton" destination="erh-S3-030" id="lp5-Og-HXf"/>
                         <outlet property="qestionLabel" destination="Nkc-d6-xgJ" id="coa-kJ-pC3"/>
                         <outletCollection property="answerButtons" destination="8x9-Kw-evL" collectionClass="NSMutableArray" id="GGy-S4-BoO"/>
                         <outletCollection property="answerButtons" destination="V0D-rd-k6o" collectionClass="NSMutableArray" id="jcC-71-p8R"/>

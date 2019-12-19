@@ -14,9 +14,12 @@ class GameViewController: UIViewController {
     @IBOutlet weak var qestionLabel: UILabel!
     
     @IBOutlet var answerButtons: [UIButton]!
+    
+    @IBOutlet weak var nextQestionButton: UIButton!
+    
     var db: Firestore!
     
-    let questionsCount = 1
+    let questionsCount = 2
     var questionsList: [String] = []
     var questionCurInd = 0
     
@@ -25,6 +28,8 @@ class GameViewController: UIViewController {
     
     let wrongAnswersCount = 3
     var wrongAnswersList: [[String]] = []
+    
+    var a = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +47,9 @@ class GameViewController: UIViewController {
         for i in 0 ..< answerButtons.count {
             Utilities.styleHollowButton(answerButtons[i])
         }
+        
+        Utilities.styleHollowButton(nextQestionButton)
+        nextQestionButton.isHidden = true
     }
     
     // Load lists of questions, answers and wrong answers
@@ -78,7 +86,7 @@ class GameViewController: UIViewController {
                         var incorrectWordInds: [Int] = []
                         
                         for _ in 0 ..< self.wrongAnswersCount {
-                            incorrectWordInds.append(Int.random(in: 0 ..< self.wrongAnswersCount))
+                            incorrectWordInds.append(Int.random(in: 0 ..< keys.count))
                         }
                         
                         // Check for repeated indexes
@@ -117,7 +125,7 @@ class GameViewController: UIViewController {
         }
     }
     
-    // Set up current question
+    // Set up labels of current question and answers
     func setWords() {
         qestionLabel.text = questionsList[questionCurInd]
         
@@ -126,19 +134,52 @@ class GameViewController: UIViewController {
         
         for i in 0 ..< answerButtons.count {
             
+            answerButtons[i].isEnabled = true
+            
             if i == correctAnswerInd {
-                answerButtons[i].titleLabel?.text = correctAnswersList[questionCurInd]
+                let answer = correctAnswersList[questionCurInd]
+                answerButtons[i].setTitle(answer, for: .normal)
             }
             else {
-                answerButtons[i].titleLabel?.text = wrongAnswersList[questionCurInd][wrongAnswersInd]
+                let answer = wrongAnswersList[questionCurInd][wrongAnswersInd]
+                answerButtons[i].setTitle(answer, for: .normal)
                 wrongAnswersInd += 1
             }
         }
-        
-        print(questionsList)
     }
     
+    // Check answer for correctness
     @IBAction func answerTapped(_ sender: UIButton) {
+        
+        nextQestionButton.isHidden = false
+        
+        // Set correct button green
+        Utilities.styleCorrectAnswerButton(answerButtons[correctAnswerInd])
+        
+        // Set wrong button red if tapped
+        for i in 0 ..< answerButtons.count {
+            
+            answerButtons[i].isEnabled = false
+            
+            if answerButtons[i] == sender {
+                
+                if i != correctAnswerInd {
+                    Utilities.styleWrongAnswerButton(sender)
+                }
+            }
+        }
     }
-
+    
+    // Go to next question
+    @IBAction func nextQestionTapped(_ sender: Any) {
+        questionCurInd += 1
+        
+        if questionCurInd >= questionsCount {
+            
+        }
+        else {
+            setUpElements()
+            setWords()
+        }
+    }
 }
