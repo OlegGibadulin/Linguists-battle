@@ -15,8 +15,9 @@ class HomeTableViewController: UITableViewController {
     @IBOutlet weak var findGameButton: UIButton!
     
     var db: Firestore!
-    var gamesList: [[String:Any]] = []
+    
     var nickname: String = ""
+    var gamesList: [[String:Any]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
