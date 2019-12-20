@@ -20,6 +20,12 @@ class HomeTableViewController: UITableViewController {
     var gamesList: [[String:Any]] = []
     
     override func viewDidLoad() {
+        db = Firestore.firestore()
+        
+        setUpElements()
+        fillNicknameLabel()
+        loadGamesList()
+        
         super.viewDidLoad()
 
         // Uncomment the following line to preserve selection between presentations
@@ -27,12 +33,6 @@ class HomeTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
-        db = Firestore.firestore()
-        
-        setUpElements()
-        fillNicknameLabel()
-        loadGamesList()
     }
     
     func setUpElements() {
