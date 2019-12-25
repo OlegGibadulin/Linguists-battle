@@ -26,7 +26,7 @@ class HomeTableViewController: UITableViewController {
         super.viewDidLoad()
 
         // Uncomment the following line to preserve selection between presentations
-         self.clearsSelectionOnViewWillAppear = false
+        // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
@@ -149,7 +149,7 @@ class HomeTableViewController: UITableViewController {
                     
                     self.db.collection("games").document(foundGameID).setData(gameContent, merge: true)
                     
-                    self.gamesContentList.append(gameContent)
+                    self.gamesContentList.insert(gameContent, at: 0)
                     
                     self.tableView.reloadData()
                 }
@@ -180,11 +180,25 @@ class HomeTableViewController: UITableViewController {
                 
                 self.db.collection("games").document(newGameID).setData(newGameContent, merge: true)
                 
-                self.gamesContentList.append(newGameContent)
+                self.gamesContentList.insert(newGameContent, at: 0)
                 
                 self.tableView.reloadData()
             }
         }
+    }
+    
+    // Check if user is creator
+    func isCreator(indexPath: IndexPath) -> Bool {
+        let creatorID = gamesContentList[indexPath.row]["creator_uid"] as! String
+        
+        return creatorID == Constants.User.id!
+    }
+    
+    // Check for user turn
+    func isUserTurn(indexPath: IndexPath) -> Bool {
+        let isCreatorTurn = gamesContentList[indexPath.row]["is_creator_turn"] as! Bool
+        
+        return isCreator(indexPath: indexPath) == isCreatorTurn
     }
     
     // MARK: - Table view data source
@@ -217,15 +231,25 @@ class HomeTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableView.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: "GamePage", sender: indexPath.row)
+        guard isUserTurn(indexPath: indexPath) else { return }
+        
+        performSegue(withIdentifier: "GamePage", sender: self)
     }
 
     // Transition to the game screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "GamePage" {
+            
+            guard tableView != nil && tableView!.indexPathForSelectedRow != nil else { return }
+            
             let controller = segue.destination as! GameViewController
-            controller.db = self.db
+            
+            let index = tableView!.indexPathForSelectedRow!
+            controller.gameID = self.gamesIDList[index.row]
+            
+            controller.isCreator = isCreator(indexPath: index)
+            
+            tableView.deselectRow(at: index, animated: true)
         }
     }
     
