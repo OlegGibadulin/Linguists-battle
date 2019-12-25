@@ -397,6 +397,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="xpX-sT-x1o"/>
                     </view>
+                    <navigationItem key="navigationItem" id="19M-rf-PxK"/>
                     <connections>
                         <outlet property="goToHomeButton" destination="wr0-8S-fH7" id="cXL-Zm-SbW"/>
                         <outlet property="nextQestionButton" destination="erh-S3-030" id="lp5-Og-HXf"/>
@@ -535,6 +536,10 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="nicknameLabel" destination="6gE-V1-wNE" id="iF0-iF-hI2"/>
+                                    <segue destination="b5T-yj-Hru" kind="presentation" identifier="GamePage" modalPresentationStyle="fullScreen" id="6QR-6D-82a">
+                                        <segue key="commit" inheritsFrom="parent" id="hqG-GS-wPa"/>
+                                        <segue key="preview" inheritsFrom="commit" id="urb-ja-5pj"/>
+                                    </segue>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -556,4 +561,7 @@
     <resources>
         <image name="return" catalog="system" width="64" height="52"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="6QR-6D-82a"/>
+    </inferredMetricsTieBreakers>
 </document>

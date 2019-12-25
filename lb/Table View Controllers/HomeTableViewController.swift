@@ -79,7 +79,7 @@ class HomeTableViewController: UITableViewController {
             
             guard error == nil && snapshot != nil else { return }
             
-            var opponent: [String:Any] = ["nickname":"", "uid":""]
+            var opponent: [String:Any] = ["nickname": "", "uid": "", "user_score": 0, "opponent_score": 0, "is_user_turn": true, "user_games_count": 0, "opponent_games_count": 0]
             var opponentInd = 0
             var opponentData: [String:Any] = [:]
             var isNotFounded = true
@@ -109,15 +109,17 @@ class HomeTableViewController: UITableViewController {
                 }
             }
             
-            // Add user ID to opponent list of games
+            // Add user infomation to opponent list of games
             if var games = opponentData["games"] as! [[String:Any]]? {
                 let document = snapshot!.documents[opponentInd]
+                
+                let user = ["nickname": self.nickname, "uid": Constants.User.id!, "user_score": 0, "opponent_score": 0, "is_user_turn": false, "user_games_count": 0, "opponent_games_count": 0] as [String : Any]
                     
-                games.append(["nickname": self.nickname, "uid": Constants.User.id!])
+                games.append(user)
             self.db.collection("users").document(document.documentID).setData(["games" : games], merge: true)
             }
             
-            // Add opponent ID to user list of games
+            // Add opponent infomation to user list of games
             self.gamesList.append(opponent)
             
             self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
@@ -156,10 +158,15 @@ class HomeTableViewController: UITableViewController {
     // Transition to the game screen
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let gameViewController =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.gameViewController) as? GameViewController
-        
-        view.window?.rootViewController = gameViewController
-        view.window?.makeKeyAndVisible()
+        tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "GamePage", sender: indexPath.row)
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "GamePage" {
+            let controller = segue.destination as! GameViewController
+            controller.db = self.db
+        }
     }
 
     /*

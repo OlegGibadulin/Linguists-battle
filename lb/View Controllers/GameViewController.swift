@@ -236,7 +236,7 @@ class GameViewController: UIViewController {
             hideElements()
             
             // Display score
-            qestionLabel.text = String(userCorrectAnswersCount) + " / " + String(questionsCount)
+            qestionLabel.text = " Правильно " + String(userCorrectAnswersCount) + " из " + String(questionsCount) + " "
             
             // Display button for transition to the home screen
             goToHomeButton.isHidden = false
