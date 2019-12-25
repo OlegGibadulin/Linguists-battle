@@ -17,22 +17,23 @@ class HomeTableViewController: UITableViewController {
     var db: Firestore!
     
     var nickname: String = ""
-    var gamesList: [[String:Any]] = []
+    var gamesIDList: [String] = []
+    var gamesContentList: [[String:Any]] = []
     
     override func viewDidLoad() {
         db = Firestore.firestore()
         
-        setUpElements()
-        fillNicknameLabel()
-        loadGamesList()
-        
         super.viewDidLoad()
 
         // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+         self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        setUpElements()
+        fillNicknameLabel()
+        loadGamesList()
     }
     
     func setUpElements() {
@@ -57,6 +58,7 @@ class HomeTableViewController: UITableViewController {
     
     // Load list of current games of user
     func loadGamesList() {
+        
         db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
             
             guard error == nil && snapshot != nil else { return }
@@ -64,7 +66,25 @@ class HomeTableViewController: UITableViewController {
             let userData = snapshot!.documents[0].data()
             
             if let games = userData["games"] {
-                self.gamesList = games as! [[String:Any]]
+                self.gamesIDList = games as! [String]
+                
+                self.loadGamesContent()
+            }
+        }
+    }
+    
+    // Load list of games information
+    func loadGamesContent() {
+        
+        for documnetID in self.gamesIDList {
+            
+            db.collection("games").document(documnetID).getDocument { (snapshot, error) in
+                
+                guard error == nil && snapshot != nil else { return }
+                
+                let gameContent = snapshot!.data()!
+                
+                self.gamesContentList.append(gameContent)
                 
                 self.tableView.reloadData()
             }
@@ -74,60 +94,93 @@ class HomeTableViewController: UITableViewController {
     // Find new opponent for game
     @IBAction func findGameTapped(_ sender: Any) {
         
-        // Looking for new opponent
-        db.collection("users").getDocuments { (snapshot, error) in
+        // Queue of created games that are waiting for opponent
+        let createdGames = db.collection("queue_for_game").document("created_games")
+        
+        createdGames.getDocument { (snapshot, error) in
             
             guard error == nil && snapshot != nil else { return }
             
-            var opponent: [String:Any] = ["nickname": "", "uid": "", "user_score": 0, "opponent_score": 0, "is_user_turn": true, "user_games_count": 0, "opponent_games_count": 0]
-            var opponentInd = 0
-            var opponentData: [String:Any] = [:]
-            var isNotFounded = true
+            var gamesID = snapshot!.data()!["games_id"] as! [String]
             
-            while isNotFounded {
-                isNotFounded = false
-                
-                // Get random opponent
-                opponentInd = Int.random(in: 0 ..< snapshot!.documents.count)
-                opponentData = snapshot!.documents[opponentInd].data()
-                
-                opponent["nickname"] = opponentData["nickname"] as! String
-                opponent["uid"] = opponentData["uid"] as! String
-                
-                // Check for user
-                if opponent["uid"] as! String == Constants.User.id! {
-                    isNotFounded = true
-                    continue
-                }
-                
-                // Check for repeated opponent
-                for curUserOpponent in self.gamesList {
-                    if opponent["uid"] as! String == curUserOpponent["uid"] as! String {
-                        isNotFounded = true
-                        break
-                    }
+            var foundGameInd = 0
+            var gameIsFound = false
+            
+            // Check for relevant game
+            for ind in 0 ..< gamesID.count {
+                if !self.gamesIDList.contains(gamesID[ind]) {
+                    foundGameInd = ind
+                    gameIsFound = true
+                    break
                 }
             }
             
-            // Add user infomation to opponent list of games
-            if var games = opponentData["games"] as! [[String:Any]]? {
-                let document = snapshot!.documents[opponentInd]
+            // Relevant game is found
+            if gameIsFound {
+                let foundGameID = gamesID[foundGameInd]
                 
-                let user = ["nickname": self.nickname, "uid": Constants.User.id!, "user_score": 0, "opponent_score": 0, "is_user_turn": false, "user_games_count": 0, "opponent_games_count": 0] as [String : Any]
+                // Update queue of games
+                gamesID.remove(at: foundGameInd)
+                
+                createdGames.setData(["games_id" : gamesID], merge: true)
+                
+                // Update list of games id
+                self.gamesIDList.append(foundGameID)
+                
+                self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
                     
-                games.append(user)
-            self.db.collection("users").document(document.documentID).setData(["games" : games], merge: true)
+                    guard error == nil && snapshot != nil else { return }
+                    
+                    let document = snapshot!.documents[0]
+                self.db.collection("users").document(document.documentID).setData(["games" : self.gamesIDList], merge: true)
+                }
+                
+                // Update content of founded game
+                let foundGame = self.db.collection("games").document(foundGameID)
+                
+                foundGame.getDocument { (snapshot, error) in
+                    
+                    guard error == nil && snapshot != nil else { return }
+                    
+                    var gameContent = snapshot!.data()!
+                    
+                    gameContent["opponent_nickname"] = self.nickname
+                    gameContent["opponent_uid"] = Constants.User.id!
+                    
+                    self.db.collection("games").document(foundGameID).setData(gameContent, merge: true)
+                    
+                    self.gamesContentList.append(gameContent)
+                    
+                    self.tableView.reloadData()
+                }
             }
-            
-            // Add opponent infomation to user list of games
-            self.gamesList.append(opponent)
-            
-            self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
+            else {
+                // Create new game
+                let newGame = self.db.collection("games").document()
+                let newGameID = newGame.documentID
                 
-                guard error == nil && snapshot != nil else { return }
+                // Update queue of games
+                gamesID.append(newGameID)
                 
-                let document = snapshot!.documents[0]
-            self.db.collection("users").document(document.documentID).setData(["games" : self.gamesList], merge: true)
+                createdGames.setData(["games_id" : gamesID], merge: true)
+                
+                // Update list of games id
+                self.gamesIDList.append(newGameID)
+                
+                self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
+                    
+                    guard error == nil && snapshot != nil else { return }
+                    
+                    let document = snapshot!.documents[0]
+                self.db.collection("users").document(document.documentID).setData(["games" : self.gamesIDList], merge: true)
+                }
+                
+                // Create content of new game
+                let newGameContent = ["creator_nickname": self.nickname, "creator_uid": Constants.User.id!, "creator_score": 0, "creator_games_count": 0, "opponent_nickname": "Waiting for opponent", "opponent_uid": "", "opponent_score": 0, "is_creator_turn": true] as [String : Any]
+                
+                self.db.collection("games").document(newGameID).setData(newGameContent, merge: true)
+                
+                self.gamesContentList.append(newGameContent)
                 
                 self.tableView.reloadData()
             }
@@ -143,30 +196,42 @@ class HomeTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return gamesList.count
+        return gamesContentList.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! HomeTableViewCell
         
-        cell.setData(gamesList[indexPath.row]["nickname"] as! String)
+        let creatorID = gamesContentList[indexPath.row]["creator_uid"] as! String
+        
+        if creatorID == Constants.User.id! {
+            cell.setData(gamesContentList[indexPath.row]["opponent_nickname"] as! String)
+        }
+        else {
+            cell.setData(gamesContentList[indexPath.row]["creator_nickname"] as! String)
+        }
 
         return cell
     }
     
-    // Transition to the game screen
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         tableView.deselectRow(at: indexPath, animated: true)
         performSegue(withIdentifier: "GamePage", sender: indexPath.row)
     }
 
+    // Transition to the game screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "GamePage" {
             let controller = segue.destination as! GameViewController
             controller.db = self.db
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        return 40
     }
 
     /*
