@@ -21,4 +21,9 @@ struct Constants {
         
         static var id: String?
     }
+    
+    struct GameSettings {
+        
+        static let gameCount = 1
+    }
 }

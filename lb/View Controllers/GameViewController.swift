@@ -21,6 +21,9 @@ class GameViewController: UIViewController {
     
     var db: Firestore!
     
+    var gameID: String = ""
+    var isCreator: Bool = false
+    
     let questionsCount = 2
     var questionsList: [String] = []
     var questionCurInd = 0
@@ -39,7 +42,6 @@ class GameViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         db = Firestore.firestore()
-        
         
         setUpElements()
         disableAnswerButtons()
@@ -110,7 +112,11 @@ class GameViewController: UIViewController {
                 
                 for _ in 0 ..< self.questionsCount {
                     
-                    let wordInd = Int.random(in: 0 ..< keys.count)
+                    var wordInd = Int.random(in: 0 ..< keys.count)
+                    
+                    while self.questionsList.contains(keys[wordInd]) {
+                        wordInd = Int.random(in: 0 ..< keys.count)
+                    }
                     
                     self.questionsList.append(keys[wordInd])
                     self.correctAnswersList.append(words[keys[wordInd]]!)
@@ -195,6 +201,12 @@ class GameViewController: UIViewController {
     // Save user score
     func saveScore() {
         
+        if isCreator {
+            self.db.collection("games").document(gameID).setData(["creator_score": userCorrectAnswersCount], merge: true)
+        }
+        else {
+            self.db.collection("games").document(gameID).setData(["opponent_score": userCorrectAnswersCount], merge: true)
+        }
     }
     
     // Check answer for correctness
@@ -236,7 +248,7 @@ class GameViewController: UIViewController {
             hideElements()
             
             // Display score
-            qestionLabel.text = String(userCorrectAnswersCount) + " / " + String(questionsCount)
+            qestionLabel.text = " Правильно " + String(userCorrectAnswersCount) + " из " + String(questionsCount) + " "
             
             // Display button for transition to the home screen
             goToHomeButton.isHidden = false
