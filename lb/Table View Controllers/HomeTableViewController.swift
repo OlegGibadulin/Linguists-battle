@@ -84,7 +84,9 @@ class HomeTableViewController: UITableViewController {
                 
                 let gameContent = snapshot!.data()!
                 
-                self.gamesContentList.append(gameContent)
+                self.gamesContentList.insert(gameContent, at: 0)
+                
+//                self.gamesContentList.append(gameContent)
                 
                 self.tableView.reloadData()
             }
@@ -125,7 +127,8 @@ class HomeTableViewController: UITableViewController {
                 createdGames.setData(["games_id" : gamesID], merge: true)
                 
                 // Update list of games id
-                self.gamesIDList.append(foundGameID)
+                self.gamesIDList.insert(foundGameID, at: 0)
+//                self.gamesIDList.append(foundGameID)
                 
                 self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
                     
@@ -164,8 +167,9 @@ class HomeTableViewController: UITableViewController {
                 
                 createdGames.setData(["games_id" : gamesID], merge: true)
                 
-                // Update list of games id
-                self.gamesIDList.append(newGameID)
+                // Update user's list of games id
+                self.gamesIDList.insert(newGameID, at: 0)
+//                self.gamesIDList.append(newGameID)
                 
                 self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
                     
@@ -176,7 +180,7 @@ class HomeTableViewController: UITableViewController {
                 }
                 
                 // Create content of new game
-                let newGameContent = ["creator_nickname": self.nickname, "creator_uid": Constants.User.id!, "creator_score": 0, "creator_games_count": 0, "opponent_nickname": "Waiting for opponent", "opponent_uid": "", "opponent_score": 0, "is_creator_turn": true] as [String : Any]
+                let newGameContent = ["creator_nickname": self.nickname, "creator_uid": Constants.User.id!, "creator_score": 0, "creator_games_count": 0, "opponent_nickname": "Waiting for opponent", "opponent_uid": "", "opponent_score": 0, "opponent_games_count": 0, "is_creator_turn": true] as [String : Any]
                 
                 self.db.collection("games").document(newGameID).setData(newGameContent, merge: true)
                 
@@ -201,6 +205,26 @@ class HomeTableViewController: UITableViewController {
         return isCreator(indexPath: indexPath) == isCreatorTurn
     }
     
+    // Check for needed count of games
+    func isGameOver(indexPath: IndexPath) -> Bool {
+        let creatorGamesCount = gamesContentList[indexPath.row]["creator_games_count"] as! Int
+        
+        let opponentGamesCount = gamesContentList[indexPath.row]["opponent_games_count"] as! Int
+        
+        return creatorGamesCount == Constants.GameSettings.gameCount && opponentGamesCount == Constants.GameSettings.gameCount
+    }
+    
+    // Check for game score
+    func isVictory(indexPath: IndexPath) -> Bool {
+        let creatorScore = gamesContentList[indexPath.row]["creator_score"] as! Int
+        
+        let opponentScore = gamesContentList[indexPath.row]["opponent_score"] as! Int
+        
+        let creatorScoreIsBigger = creatorScore > opponentScore
+        
+        return isCreator(indexPath: indexPath) == creatorScoreIsBigger
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -217,21 +241,41 @@ class HomeTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! HomeTableViewCell
         
-        let creatorID = gamesContentList[indexPath.row]["creator_uid"] as! String
-        
-        if creatorID == Constants.User.id! {
+        // Set opponent nickname
+        if isCreator(indexPath: indexPath) {
             cell.setData(gamesContentList[indexPath.row]["opponent_nickname"] as! String)
         }
         else {
             cell.setData(gamesContentList[indexPath.row]["creator_nickname"] as! String)
+        }
+        
+        // Set game status
+        if isGameOver(indexPath: indexPath) {
+            
+            if isVictory(indexPath: indexPath) {
+                cell.setVictoryStatus()
+            } else {
+                cell.setDefeatStatus()
+            }
+            
+        } else {
+            
+            if isUserTurn(indexPath: indexPath) {
+                cell.setReadyStatus()
+                print(indexPath.row)
+                print("ready")
+            } else {
+                cell.setWaitingStatus()
+                print(indexPath.row)
+                print("wait")
+            }
+            
         }
 
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        guard isUserTurn(indexPath: indexPath) else { return }
         
         performSegue(withIdentifier: "GamePage", sender: self)
     }
@@ -245,9 +289,22 @@ class HomeTableViewController: UITableViewController {
             let controller = segue.destination as! GameViewController
             
             let index = tableView!.indexPathForSelectedRow!
-            controller.gameID = self.gamesIDList[index.row]
+            let gameID = self.gamesIDList[index.row]
+            
+            print(index.row, gameID, isCreator(indexPath: index), isUserTurn(indexPath: index))
+            
+            print(self.gamesIDList)
+            
+            controller.gameID = gameID
             
             controller.isCreator = isCreator(indexPath: index)
+            
+            if isCreator(indexPath: index) {
+                self.db.collection("games").document(gameID).setData(["creator_games_count": 1, "is_creator_turn": false], merge: true)
+            }
+            else {
+                self.db.collection("games").document(gameID).setData(["opponent_games_count": 1, "is_creator_turn": true], merge: true)
+            }
             
             tableView.deselectRow(at: index, animated: true)
         }
@@ -255,7 +312,7 @@ class HomeTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        return 40
+        return 70
     }
 
     /*

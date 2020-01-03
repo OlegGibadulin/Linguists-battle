@@ -112,7 +112,11 @@ class GameViewController: UIViewController {
                 
                 for _ in 0 ..< self.questionsCount {
                     
-                    let wordInd = Int.random(in: 0 ..< keys.count)
+                    var wordInd = Int.random(in: 0 ..< keys.count)
+                    
+                    while self.questionsList.contains(keys[wordInd]) {
+                        wordInd = Int.random(in: 0 ..< keys.count)
+                    }
                     
                     self.questionsList.append(keys[wordInd])
                     self.correctAnswersList.append(words[keys[wordInd]]!)

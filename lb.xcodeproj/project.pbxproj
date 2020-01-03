@@ -22,6 +22,9 @@
 		C4A70E9223A77014007BDB21 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E9123A77014007BDB21 /* Utilities.swift */; };
 		C4A70E9523A780EC007BDB21 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4A70E9423A780EC007BDB21 /* GoogleService-Info.plist */; };
 		C4A70E9723A79269007BDB21 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A70E9623A79269007BDB21 /* Constants.swift */; };
+		C4B668E423BF66FF00B395F7 /* lose.png in Resources */ = {isa = PBXBuildFile; fileRef = C4B668E123BF66FE00B395F7 /* lose.png */; };
+		C4B668E523BF66FF00B395F7 /* wait.png in Resources */ = {isa = PBXBuildFile; fileRef = C4B668E223BF66FF00B395F7 /* wait.png */; };
+		C4B668E623BF66FF00B395F7 /* win.png in Resources */ = {isa = PBXBuildFile; fileRef = C4B668E323BF66FF00B395F7 /* win.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +46,9 @@
 		C4A70E9123A77014007BDB21 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		C4A70E9423A780EC007BDB21 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C4A70E9623A79269007BDB21 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		C4B668E123BF66FE00B395F7 /* lose.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lose.png; sourceTree = "<group>"; };
+		C4B668E223BF66FF00B395F7 /* wait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wait.png; sourceTree = "<group>"; };
+		C4B668E323BF66FF00B395F7 /* win.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = win.png; sourceTree = "<group>"; };
 		F8BA1C89B7782B0761CA2E39 /* Pods-lb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-lb.release.xcconfig"; path = "Target Support Files/Pods-lb/Pods-lb.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,6 +104,7 @@
 				C4A70E7F23A7645C007BDB21 /* Assets.xcassets */,
 				C4A70E8123A7645C007BDB21 /* LaunchScreen.storyboard */,
 				C4A70E8423A7645C007BDB21 /* Info.plist */,
+				C4B668E023BF66E100B395F7 /* Content */,
 			);
 			path = lb;
 			sourceTree = "<group>";
@@ -120,6 +127,16 @@
 				C4A70E9623A79269007BDB21 /* Constants.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		C4B668E023BF66E100B395F7 /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				C4B668E123BF66FE00B395F7 /* lose.png */,
+				C4B668E223BF66FF00B395F7 /* wait.png */,
+				C4B668E323BF66FF00B395F7 /* win.png */,
+			);
+			path = Content;
 			sourceTree = "<group>";
 		};
 		CECFF6DD84B82026C13376D7 /* Frameworks */ = {
@@ -200,6 +217,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4A70E8323A7645C007BDB21 /* LaunchScreen.storyboard in Resources */,
+				C4B668E423BF66FF00B395F7 /* lose.png in Resources */,
+				C4B668E523BF66FF00B395F7 /* wait.png in Resources */,
+				C4B668E623BF66FF00B395F7 /* win.png in Resources */,
 				C4A70E9523A780EC007BDB21 /* GoogleService-Info.plist in Resources */,
 				C4A70E8023A7645C007BDB21 /* Assets.xcassets in Resources */,
 				C4A70E7E23A76459007BDB21 /* Main.storyboard in Resources */,
