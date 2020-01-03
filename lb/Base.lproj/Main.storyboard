@@ -442,13 +442,13 @@
                                             <rect key="frame" x="20" y="0.0" width="374" height="100"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nickname" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="6gE-V1-wNE">
-                                                    <rect key="frame" x="0.0" y="0.0" width="194" height="100"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="274" height="100"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="S99-KN-y8r">
-                                                    <rect key="frame" x="194" y="0.0" width="100" height="100"/>
+                                                    <rect key="frame" x="274" y="0.0" width="100" height="100"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="dOz-nS-PvS">
                                                             <rect key="frame" x="0.0" y="0.0" width="100" height="25"/>
@@ -468,30 +468,6 @@
                                                         <constraint firstItem="dGj-CF-GhS" firstAttribute="height" secondItem="dOz-nS-PvS" secondAttribute="height" id="h2l-h1-HAd"/>
                                                     </constraints>
                                                 </stackView>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="rpU-ZF-u6M">
-                                                    <rect key="frame" x="294" y="0.0" width="80" height="100"/>
-                                                    <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K0Q-U4-7BJ">
-                                                            <rect key="frame" x="0.0" y="0.0" width="80" height="35"/>
-                                                        </stackView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hmW-fe-6L7">
-                                                            <rect key="frame" x="0.0" y="35" width="80" height="30"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="80" id="Q3Q-WS-ZgE"/>
-                                                                <constraint firstAttribute="height" constant="30" id="Sdx-Ab-e9v"/>
-                                                            </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fX8-ua-nvO">
-                                                            <rect key="frame" x="0.0" y="65" width="80" height="35"/>
-                                                        </stackView>
-                                                    </subviews>
-                                                    <constraints>
-                                                        <constraint firstItem="fX8-ua-nvO" firstAttribute="height" secondItem="K0Q-U4-7BJ" secondAttribute="height" id="cFz-2e-aqW"/>
-                                                    </constraints>
-                                                </stackView>
                                             </subviews>
                                         </stackView>
                                     </subviews>
@@ -505,7 +481,6 @@
                                 <connections>
                                     <outlet property="nicknameLabel" destination="6gE-V1-wNE" id="iF0-iF-hI2"/>
                                     <outlet property="statusImage" destination="AEl-ie-bcI" id="mjp-9R-pvs"/>
-                                    <outlet property="statusLabel" destination="hmW-fe-6L7" id="tmF-Ym-Olz"/>
                                     <segue destination="b5T-yj-Hru" kind="presentation" identifier="GamePage" modalPresentationStyle="fullScreen" id="6QR-6D-82a">
                                         <segue key="commit" inheritsFrom="parent" id="hqG-GS-wPa"/>
                                         <segue key="preview" inheritsFrom="commit" id="urb-ja-5pj"/>

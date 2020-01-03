@@ -56,46 +56,6 @@ class Utilities {
         return passwordTest.evaluate(with: password)
     }
     
-    // MARK: - Home module
-    
-    static func styleReady(_ label: UILabel) {
-        
-        // Hollow rounded corner style
-        label.backgroundColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0)
-        
-        label.layer.borderWidth = 2
-        label.layer.borderColor = UIColor.black.cgColor
-        label.layer.cornerRadius = 5.0
-        label.tintColor = UIColor.black
-    }
-    
-    static func styleWaiting(_ label: UILabel) {
-        
-        // Filled rounded corner style
-        label.backgroundColor = UIColor.init(red: 48/255, green: 173/255, blue: 99/255, alpha: 1)
-        
-        label.layer.cornerRadius = 25.0
-        label.tintColor = UIColor.white
-    }
-    
-    static func styleVictory(_ label: UILabel) {
-        
-        // Filled rounded corner style
-        label.backgroundColor = UIColor.init(red: 173/255, green: 173/255, blue: 99/255, alpha: 1)
-        
-        label.layer.cornerRadius = 25.0
-        label.tintColor = UIColor.white
-    }
-    
-    static func styleDefeat(_ label: UILabel) {
-        
-        // Filled rounded corner style
-        label.backgroundColor = UIColor.init(red: 173/255, green: 48/255, blue: 99/255, alpha: 1)
-        
-        label.layer.cornerRadius = 25.0
-        label.tintColor = UIColor.white
-    }
-    
     // MARK: - Game module
     
     static func styleCorrectAnswerButton(_ button: UIButton) {

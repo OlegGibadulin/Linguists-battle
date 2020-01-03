@@ -12,13 +12,10 @@ class HomeTableViewCell: UITableViewCell {
     
     @IBOutlet weak var nicknameLabel: UILabel!
     
-    @IBOutlet weak var statusLabel: UILabel!
-    
     @IBOutlet weak var statusImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -39,29 +36,21 @@ class HomeTableViewCell: UITableViewCell {
     
     func setVictoryStatus() {
         disable()
-//        Utilities.styleVictory(statusLabel)
-        statusLabel.text = "victory"
         statusImage.image = UIImage(named: "win")
     }
     
     func setDefeatStatus() {
         disable()
-//        Utilities.styleDefeat(statusLabel)
-        statusLabel.text = "defeat"
         statusImage.image = UIImage(named: "lose")
     }
     
     func setWaitingStatus() {
         disable()
-//        Utilities.styleWaiting(statusLabel)
-        statusLabel.text = "wait"
         statusImage.image = UIImage(named: "wait")
     }
     
     func setReadyStatus() {
         enable()
-//        Utilities.styleReady(statusLabel)
-//        statusLabel.text = "ready"
         statusImage.image = UIImage()
     }
 }
