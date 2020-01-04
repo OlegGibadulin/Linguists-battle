@@ -76,7 +76,6 @@ class LoginViewController: UIViewController {
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             
             if error != nil || result == nil {
-                // error!.localizedDescription
                 self.showError("Неверный email или пароль")
             }
             else {
