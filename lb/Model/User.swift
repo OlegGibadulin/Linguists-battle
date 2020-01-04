@@ -8,7 +8,7 @@
 
 import Firebase
 
-class User {
+struct User {
     var id: String!
     var nickname: String!
     var gamesIDList: [String] = []
