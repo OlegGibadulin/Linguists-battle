@@ -23,6 +23,8 @@ class SignUpViewController: UIViewController {
     
     @IBOutlet weak var signUpButton: UIButton!
     
+    var userID : String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -63,10 +65,20 @@ class SignUpViewController: UIViewController {
     
     // Transition to the home screen
     func goToHomeScreen() {
-        let homeViewController =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeTableViewController) as? HomeTableViewController
+        let user = User(uid: userID)
         
-        view.window?.rootViewController = homeViewController
-        view.window?.makeKeyAndVisible()
+        user.loadUserData() {
+            let gameContentManager = GameContentManager()
+            
+            let homeViewModel = HomeViewModel(user: user, gameContentManager: gameContentManager)
+            
+            let homeViewController =  self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeTableViewController) as? HomeTableViewController
+            
+            homeViewController!.viewModel = homeViewModel
+            
+            self.view.window?.rootViewController = homeViewController
+            self.view.window?.makeKeyAndVisible()
+        }
     }
     
     @IBAction func signUpTapped(_ sender: Any) {
@@ -103,6 +115,8 @@ class SignUpViewController: UIViewController {
                 else {
                     // Store user id
                     Constants.User.id = result!.user.uid
+                    
+                    self.userID = result!.user.uid
                     
                     // Transition to the home screen
                     self.goToHomeScreen()

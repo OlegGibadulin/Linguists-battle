@@ -55,15 +55,19 @@ class LoginViewController: UIViewController {
     // Transition to the home screen
     func goToHomeScreen() {
         let user = User(uid: userID)
-        let gameContentManager = GameContentManager()
-        let homeViewModel = HomeViewModel(user: user, gameContentManager: gameContentManager)
         
-        let homeViewController =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeTableViewController) as? HomeTableViewController
-        
-        homeViewController!.viewModel = homeViewModel
-        
-        view.window?.rootViewController = homeViewController
-        view.window?.makeKeyAndVisible()
+        user.loadUserData() {
+            let gameContentManager = GameContentManager()
+            
+            let homeViewModel = HomeViewModel(user: user, gameContentManager: gameContentManager)
+            
+            let homeViewController =  self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeTableViewController) as? HomeTableViewController
+            
+            homeViewController!.viewModel = homeViewModel
+            
+            self.view.window?.rootViewController = homeViewController
+            self.view.window?.makeKeyAndVisible()
+        }
     }
 
     @IBAction func loginTapped(_ sender: Any) {

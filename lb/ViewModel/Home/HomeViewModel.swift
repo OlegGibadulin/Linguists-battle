@@ -22,15 +22,18 @@ class HomeViewModel {
         db = Firestore.firestore()
     }
     
-    func updateGamesList() {
+    func updateGamesList(completion: @escaping() -> Void) {
         
-        db = Firestore.firestore() // ?
-        
-        gamesContentList = gameContentManager.getGamesContentList(id: user.gamesIDList)
+        self.gameContentManager.getGamesContentList(id: self.user.gamesIDList) { gamesContent in
+            
+            self.gamesContentList = gamesContent
+            
+            completion()
+        }
     }
     
     func getNickname() -> String {
-        return user.nickname ?? ""
+        return user.nickname
     }
     
     func getGamesCount() -> Int {
@@ -98,7 +101,7 @@ class HomeViewModel {
     }
     
     // Find new opponent for game
-    func findGame() {
+    func findGame(completion: @escaping() -> Void) {
         
         // Queue of created games that are waiting for opponent
         let createdGames = db.collection("queue_for_game").document("created_games")
@@ -158,6 +161,8 @@ class HomeViewModel {
                     let gameContent = self.gameContentManager.getGameContent(from: gameData)
                     
                     self.gamesContentList.insert(gameContent, at: 0)
+                    
+                    completion()
                 }
                 
             } else {
@@ -189,8 +194,11 @@ class HomeViewModel {
                 let gameContent = self.gameContentManager.getGameContent(from: newGameData)
                 
                 self.gamesContentList.insert(gameContent, at: 0)
-                }
+                
+                completion()
+                
             }
         }
+    }
     
 }

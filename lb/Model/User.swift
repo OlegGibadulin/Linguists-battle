@@ -15,16 +15,13 @@ class User {
     
     init(uid: String) {
         id = uid
-        
-        loadNickname()
-        loadGamesList()
     }
     
-    // Load user nickname
-    func loadNickname() {
+    // Load user nickname and list of current games of user
+    func loadUserData(completion: @escaping() -> Void) {
         let db = Firestore.firestore()
         
-        db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
+        db.collection("users").whereField("uid", isEqualTo: id!).getDocuments { (snapshot, error) in
             
             guard error == nil && snapshot != nil else { return }
             
@@ -33,22 +30,12 @@ class User {
             if let nickname = userData["nickname"] as! String? {
                 self.nickname = nickname
             }
-        }
-    }
-    
-    // Load list of current games of user
-    func loadGamesList() {
-        let db = Firestore.firestore()
-        
-        db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
-            
-            guard error == nil && snapshot != nil else { return }
-            
-            let userData = snapshot!.documents[0].data()
             
             if let idList = userData["games"] as! [String]? {
                 self.gamesIDList = idList
             }
+            
+            completion()
         }
     }
     

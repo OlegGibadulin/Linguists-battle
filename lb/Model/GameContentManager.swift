@@ -11,13 +11,19 @@ import Firebase
 class GameContentManager {
     
     // Load list of games information
-    func getGamesContentList(id gamesIDList: [String]) -> [GameContent] {
+    func getGamesContentList(id gamesIDList: [String], completion: @escaping([GameContent]) -> Void) {
         
         let db = Firestore.firestore()
-        var gamesContentList: [GameContent] = []
         
-        for documnetID in gamesIDList {
-            db.collection("games").document(documnetID).getDocument { (snapshot, error) in
+        var gamesContentList: [GameContent] = []
+        for _ in 0 ..< gamesIDList.count {
+            gamesContentList.append(GameContent())
+        }
+        
+        var loadedGamesCount = 0
+        
+        for i in 0 ..< gamesIDList.count {
+            db.collection("games").document(gamesIDList[i]).getDocument { (snapshot, error) in
                 
                 guard error == nil && snapshot != nil else { return }
                 
@@ -25,12 +31,16 @@ class GameContentManager {
                     
                     let gameContent = self.getGameContent(from: gameData)
                     
-                    gamesContentList.insert(gameContent, at: 0)
+                    gamesContentList[i] = gameContent
+                }
+                
+                loadedGamesCount += 1
+                
+                if (loadedGamesCount == gamesIDList.count) {
+                    completion(gamesContentList)
                 }
             }
         }
-        
-        return gamesContentList
     }
     
     func getGameContent(from gameData: [String:Any]) -> GameContent {

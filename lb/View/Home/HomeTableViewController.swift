@@ -13,8 +13,9 @@ class HomeTableViewController: UITableViewController {
     
     var viewModel: HomeViewModel! {
         didSet {
-            viewModel.updateGamesList()
-            self.tableView.reloadData()
+            viewModel.updateGamesList() {
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -35,7 +36,16 @@ class HomeTableViewController: UITableViewController {
         fillNicknameLabel()
     }
     
+    
+    @IBAction func refresh(_ sender: UIRefreshControl) {
+        viewModel.updateGamesList() {
+            self.tableView.reloadData()
+            sender.endRefreshing()
+        }
+    }
+    
     func setUpElements() {
+        
         Utilities.styleFilledButton(findGameButton)
     }
     
@@ -67,8 +77,9 @@ class HomeTableViewController: UITableViewController {
 
     // Find new opponent for game
     @IBAction func findGameTapped(_ sender: Any) {
-        viewModel.findGame()
-        self.tableView.reloadData()
+        viewModel.findGame() {
+            self.tableView.reloadData()
+        }
     }
     
     // MARK: - Table view data source
