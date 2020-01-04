@@ -9,159 +9,186 @@
 import Firebase
 
 class HomeViewModel {
+    var db: Firestore!
+    
     var user: User!
+    var gameContentManager: GameContentManager!
     var gamesContentList: [GameContent] = []
     
-    init() {
+    required init(user: User, gameContentManager: GameContentManager) {
+        self.user = user
+        self.gameContentManager = gameContentManager
+        
         db = Firestore.firestore()
     }
     
-    // Check if user is creator
-    func isCreator(indexPath: IndexPath) -> Bool {
-        let creatorID = gamesContentList[indexPath.row]["creator_uid"] as! String
+    func updateGamesList() {
         
-        return creatorID == Constants.User.id!
+        db = Firestore.firestore() // ?
+        
+        gamesContentList = gameContentManager.getGamesContentList(id: user.gamesIDList)
+    }
+    
+    func getNickname() -> String {
+        return user.nickname ?? ""
+    }
+    
+    func getGamesCount() -> Int {
+        return gamesContentList.count
+    }
+    
+    // Check if user is creator
+    func isCreator(at index: Int) -> Bool {
+        let creatorID = gamesContentList[index].creatorID!
+        
+        return creatorID == user.id!
     }
     
     // Check for user turn
-    func isUserTurn(indexPath: IndexPath) -> Bool {
-        let isCreatorTurn = gamesContentList[indexPath.row]["is_creator_turn"] as! Bool
+    func isUserTurn(at index: Int) -> Bool {
+        let isCreatorTurn = gamesContentList[index].isCreatorTurn!
         
-        return isCreator(indexPath: indexPath) == isCreatorTurn
+        return isCreator(at: index) == isCreatorTurn
     }
     
     // Check for needed count of games
-    func isGameOver(indexPath: IndexPath) -> Bool {
-        let creatorGamesCount = gamesContentList[indexPath.row]["creator_games_count"] as! Int
-        
-        let opponentGamesCount = gamesContentList[indexPath.row]["opponent_games_count"] as! Int
+    func isGameOver(at index: Int) -> Bool {
+        let creatorGamesCount = gamesContentList[index].creatorGamesCount!
+        let opponentGamesCount = gamesContentList[index].opponentGamesCount!
         
         return creatorGamesCount == Constants.GameSettings.gameCount && opponentGamesCount == Constants.GameSettings.gameCount
     }
     
     // Check for game score
-    func isVictory(indexPath: IndexPath) -> Bool {
-        let creatorScore = gamesContentList[indexPath.row]["creator_score"] as! Int
-        
-        let opponentScore = gamesContentList[indexPath.row]["opponent_score"] as! Int
+    func isVictory(at index: Int) -> Bool {
+        let creatorScore = gamesContentList[index].creatorScore!
+        let opponentScore = gamesContentList[index].opponentScore!
         
         let creatorScoreIsBigger = creatorScore > opponentScore
         
-        return isCreator(indexPath: indexPath) == creatorScoreIsBigger
+        return isCreator(at: index) == creatorScoreIsBigger
     }
     
-    func getOpponentNickname() {
-        if isCreator(indexPath: indexPath) {
-            cell.setData(gamesContentList[indexPath.row]["opponent_nickname"] as! String)
+    func getOpponentNickname(at index: Int) -> String {
+        
+        var opponentNickname = ""
+        
+        if isCreator(at: index) {
+            opponentNickname = gamesContentList[index].opponentNickname!
+        } else {
+            opponentNickname = gamesContentList[index].creatorNickname!
         }
-        else {
-            cell.setData(gamesContentList[indexPath.row]["creator_nickname"] as! String)
-        }
+        
+        return opponentNickname
     }
     
-    func increaseUserGameCount() {
-        if isCreator(indexPath: index) {
+    func getGameID(at index: Int) -> String {
+        return user.gamesIDList[index]
+    }
+    
+    func increaseUserGameCount(at index: Int) {
+        
+        let gameID = getGameID(at: index)
+        
+        if isCreator(at: index) {
             self.db.collection("games").document(gameID).setData(["creator_games_count": 1, "is_creator_turn": false], merge: true)
-        }
-        else {
+        } else {
             self.db.collection("games").document(gameID).setData(["opponent_games_count": 1, "is_creator_turn": true], merge: true)
         }
     }
     
     // Find new opponent for game
     func findGame() {
+        
+        // Queue of created games that are waiting for opponent
+        let createdGames = db.collection("queue_for_game").document("created_games")
+        
+        createdGames.getDocument { (snapshot, error) in
             
-            // Queue of created games that are waiting for opponent
-            let createdGames = db.collection("queue_for_game").document("created_games")
+            guard error == nil && snapshot != nil else { return }
             
-            createdGames.getDocument { (snapshot, error) in
+            var gamesID = snapshot!.data()!["games_id"] as! [String]
+            
+            var foundGameInd = 0
+            var gameIsFound = false
+            
+            // Check for relevant game
+            for ind in 0 ..< gamesID.count {
+                if !self.user.gamesIDList.contains(gamesID[ind]) {
+                    foundGameInd = ind
+                    gameIsFound = true
+                    break
+                }
+            }
+            
+            // Relevant game is found
+            if gameIsFound {
+                let foundGameID = gamesID[foundGameInd]
                 
-                guard error == nil && snapshot != nil else { return }
+                // Update queue of games
+                gamesID.remove(at: foundGameInd)
                 
-                var gamesID = snapshot!.data()!["games_id"] as! [String]
+                createdGames.setData(["games_id" : gamesID], merge: true)
                 
-                var foundGameInd = 0
-                var gameIsFound = false
+                // Update list of games id
+                self.user.gamesIDList.insert(foundGameID, at: 0)
                 
-                // Check for relevant game
-                for ind in 0 ..< gamesID.count {
-                    if !self.gamesIDList.contains(gamesID[ind]) {
-                        foundGameInd = ind
-                        gameIsFound = true
-                        break
-                    }
+                self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
+                    
+                    guard error == nil && snapshot != nil else { return }
+                    
+                    let document = snapshot!.documents[0]
+                    self.db.collection("users").document(document.documentID).setData(["games" : self.user.gamesIDList], merge: true)
+                    
                 }
                 
-                // Relevant game is found
-                if gameIsFound {
-                    let foundGameID = gamesID[foundGameInd]
+                // Update content of founded game
+                let foundGame = self.db.collection("games").document(foundGameID)
+                
+                foundGame.getDocument { (snapshot, error) in
                     
-                    // Update queue of games
-                    gamesID.remove(at: foundGameInd)
+                    guard error == nil && snapshot != nil else { return }
                     
-                    createdGames.setData(["games_id" : gamesID], merge: true)
+                    var gameData = snapshot!.data()!
                     
-                    // Update list of games id
-                    self.gamesIDList.insert(foundGameID, at: 0)
-    //                self.gamesIDList.append(foundGameID)
+                    gameData["opponent_nickname"] = self.user.nickname
+                    gameData["opponent_uid"] = Constants.User.id!
+                    self.db.collection("games").document(foundGameID).setData(gameData, merge: true)
                     
-                    self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
-                        
-                        guard error == nil && snapshot != nil else { return }
-                        
-                        let document = snapshot!.documents[0]
-                    self.db.collection("users").document(document.documentID).setData(["games" : self.gamesIDList], merge: true)
-                    }
+                    let gameContent = self.gameContentManager.getGameContent(from: gameData)
                     
-                    // Update content of founded game
-                    let foundGame = self.db.collection("games").document(foundGameID)
-                    
-                    foundGame.getDocument { (snapshot, error) in
-                        
-                        guard error == nil && snapshot != nil else { return }
-                        
-                        var gameContent = snapshot!.data()!
-                        
-                        gameContent["opponent_nickname"] = self.nickname
-                        gameContent["opponent_uid"] = Constants.User.id!
-                        
-                        self.db.collection("games").document(foundGameID).setData(gameContent, merge: true)
-                        
-                        self.gamesContentList.insert(gameContent, at: 0)
-                        
-                        self.tableView.reloadData()
-                    }
+                    self.gamesContentList.insert(gameContent, at: 0)
                 }
-                else {
-                    // Create new game
-                    let newGame = self.db.collection("games").document()
-                    let newGameID = newGame.documentID
+                
+            } else {
+                
+                // Create new game
+                let newGame = self.db.collection("games").document()
+                let newGameID = newGame.documentID
+                
+                // Update queue of games
+                gamesID.append(newGameID)
+                
+                createdGames.setData(["games_id" : gamesID], merge: true)
+                
+                // Update user's list of games id
+                self.user.gamesIDList.insert(newGameID, at: 0)
+                
+                self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
                     
-                    // Update queue of games
-                    gamesID.append(newGameID)
+                    guard error == nil && snapshot != nil else { return }
                     
-                    createdGames.setData(["games_id" : gamesID], merge: true)
-                    
-                    // Update user's list of games id
-                    self.gamesIDList.insert(newGameID, at: 0)
-    //                self.gamesIDList.append(newGameID)
-                    
-                    self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
-                        
-                        guard error == nil && snapshot != nil else { return }
-                        
-                        let document = snapshot!.documents[0]
-                    self.db.collection("users").document(document.documentID).setData(["games" : self.gamesIDList], merge: true)
+                    let document = snapshot!.documents[0]
+                    self.db.collection("users").document(document.documentID).setData(["games" : self.user.gamesIDList], merge: true)
                     }
-                    
-                    // Create content of new game
-                    let newGameContent = ["creator_nickname": self.nickname, "creator_uid": Constants.User.id!, "creator_score": 0, "creator_games_count": 0, "opponent_nickname": "Waiting for opponent", "opponent_uid": "", "opponent_score": 0, "opponent_games_count": 0, "is_creator_turn": true] as [String : Any]
-                    
-                    self.db.collection("games").document(newGameID).setData(newGameContent, merge: true)
-                    
-                    self.gamesContentList.insert(newGameContent, at: 0)
-                    
-                    self.tableView.reloadData()
+                
+                // Create content of new game
+                let newGameData = ["creator_nickname": self.user.nickname!, "creator_uid": Constants.User.id!, "creator_score": 0, "creator_games_count": 0, "opponent_nickname": "Waiting for opponent", "opponent_uid": "", "opponent_score": 0, "opponent_games_count": 0, "is_creator_turn": true] as [String : Any]
+                self.db.collection("games").document(newGameID).setData(newGameData, merge: true)
+                
+                let gameContent = self.gameContentManager.getGameContent(from: newGameData)
+                
+                self.gamesContentList.insert(gameContent, at: 0)
                 }
             }
         }

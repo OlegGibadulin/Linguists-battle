@@ -20,6 +20,7 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var loginButton: UIButton!
     
+    var userID : String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +54,13 @@ class LoginViewController: UIViewController {
     
     // Transition to the home screen
     func goToHomeScreen() {
+        let user = User(uid: userID)
+        let gameContentManager = GameContentManager()
+        let homeViewModel = HomeViewModel(user: user, gameContentManager: gameContentManager)
+        
         let homeViewController =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeTableViewController) as? HomeTableViewController
+        
+        homeViewController!.viewModel = homeViewModel
         
         view.window?.rootViewController = homeViewController
         view.window?.makeKeyAndVisible()
@@ -81,6 +88,8 @@ class LoginViewController: UIViewController {
             else {
                 // Store user id
                 Constants.User.id = result!.user.uid
+                
+                self.userID = result!.user.uid
                 
                 // Transition to the home screen
                 self.goToHomeScreen()

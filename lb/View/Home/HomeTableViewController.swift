@@ -11,11 +11,10 @@ import Firebase
 
 class HomeTableViewController: UITableViewController {
     
-    weak var viewModel: HomeViewModel! {
+    var viewModel: HomeViewModel! {
         didSet {
-            update() {
-                self.tableView.reloadData()
-            }
+            viewModel.updateGamesList()
+            self.tableView.reloadData()
         }
     }
     
@@ -43,7 +42,7 @@ class HomeTableViewController: UITableViewController {
     // Set user nickname into label
     func fillNicknameLabel() {
         
-        self.nicknameLabel.text = "Привет, " + (nickname as! String)
+        nicknameLabel.text = "Привет, " + viewModel.getNickname()
     }
     
     // Transition to the game screen
@@ -56,12 +55,11 @@ class HomeTableViewController: UITableViewController {
             let controller = segue.destination as! GameViewController
             
             let index = tableView!.indexPathForSelectedRow!
-            let gameID = self.gamesIDList[index.row]
             
-            controller.gameID = gameID
-            controller.isCreator = isCreator(indexPath: index)
+            viewModel.increaseUserGameCount(at: index.row)
             
-            increaseUserGameCount()
+            controller.gameID = viewModel.getGameID(at: index.row)
+            controller.isCreator = viewModel.isCreator(at: index.row)
             
             tableView.deselectRow(at: index, animated: true)
         }
@@ -69,9 +67,8 @@ class HomeTableViewController: UITableViewController {
 
     // Find new opponent for game
     @IBAction func findGameTapped(_ sender: Any) {
-        findGame {
-            self.tableView.reloadData()
-        }
+        viewModel.findGame()
+        self.tableView.reloadData()
     }
     
     // MARK: - Table view data source
@@ -83,26 +80,28 @@ class HomeTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return gamesContentList.count
+        return viewModel.getGamesCount()
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! HomeTableViewCell
         
+        let index = indexPath.row
+        
         // Set opponent nickname
-        let opponentNickname = getOpponentNickname()
+        let opponentNickname = viewModel.getOpponentNickname(at: index)
         cell.setData(opponentNickname)
         
         // Set game status
-        if isGameOver(indexPath: indexPath) {
-            if isVictory(indexPath: indexPath) {
+        if viewModel.isGameOver(at: index) {
+            if viewModel.isVictory(at: index) {
                 cell.setVictoryStatus()
             } else {
                 cell.setDefeatStatus()
             }
         } else {
-            if isUserTurn(indexPath: indexPath) {
+            if viewModel.isUserTurn(at: index) {
                 cell.setReadyStatus()
             } else {
                 cell.setWaitingStatus()
