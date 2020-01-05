@@ -481,10 +481,6 @@
                                 <connections>
                                     <outlet property="nicknameLabel" destination="6gE-V1-wNE" id="iF0-iF-hI2"/>
                                     <outlet property="statusImage" destination="AEl-ie-bcI" id="mjp-9R-pvs"/>
-                                    <segue destination="b5T-yj-Hru" kind="presentation" identifier="GamePage" modalPresentationStyle="fullScreen" id="6QR-6D-82a">
-                                        <segue key="commit" inheritsFrom="parent" id="hqG-GS-wPa"/>
-                                        <segue key="preview" inheritsFrom="commit" id="urb-ja-5pj"/>
-                                    </segue>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -513,7 +509,4 @@
     <resources>
         <image name="return" catalog="system" width="64" height="50"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="6QR-6D-82a"/>
-    </inferredMetricsTieBreakers>
 </document>

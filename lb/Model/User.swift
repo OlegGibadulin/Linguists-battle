@@ -18,7 +18,7 @@ class User {
     }
     
     // Load user nickname and list of current games of user
-    func loadUserData(completion: @escaping() -> Void) {
+    func loadData(completion: @escaping() -> Void) {
         let db = Firestore.firestore()
         
         db.collection("users").whereField("uid", isEqualTo: id!).getDocuments { (snapshot, error) in

@@ -56,7 +56,7 @@ class LoginViewController: UIViewController {
     func goToHomeScreen() {
         let user = User(uid: userID)
         
-        user.loadUserData() {
+        user.loadData() {
             let gameContentManager = GameContentManager()
             
             let homeViewModel = HomeViewModel(user: user, gameContentManager: gameContentManager)

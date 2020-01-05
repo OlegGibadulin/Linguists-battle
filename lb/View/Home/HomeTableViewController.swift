@@ -56,22 +56,29 @@ class HomeTableViewController: UITableViewController {
     }
     
     // Transition to the game screen
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func goToGameScreen() {
+        guard tableView != nil && tableView!.indexPathForSelectedRow != nil else { return }
+
+        let index = tableView!.indexPathForSelectedRow!
         
-        if segue.identifier == "GamePage" {
+        self.tableView.deselectRow(at: index, animated: true)
+        
+        viewModel.increaseUserGameCount(at: index.row)
+        
+        let gameID = viewModel.getGameID(at: index.row)
+        let isCreator = viewModel.isCreator(at: index.row)
+        
+        let game = Game(id: gameID, userIsCreator: isCreator)
+        
+        game.loadData() {
+            let gameViewModel = GameViewModel(game: game)
             
-            guard tableView != nil && tableView!.indexPathForSelectedRow != nil else { return }
+            let gameViewController =  self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.gameViewController) as? GameViewController
             
-            let controller = segue.destination as! GameViewController
+            self.view.window?.rootViewController = gameViewController
+            self.view.window?.makeKeyAndVisible()
             
-            let index = tableView!.indexPathForSelectedRow!
-            
-            viewModel.increaseUserGameCount(at: index.row)
-            
-            controller.gameID = viewModel.getGameID(at: index.row)
-            controller.isCreator = viewModel.isCreator(at: index.row)
-            
-            tableView.deselectRow(at: index, animated: true)
+            gameViewController!.viewModel = gameViewModel
         }
     }
 
@@ -124,7 +131,7 @@ class HomeTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        performSegue(withIdentifier: "GamePage", sender: self)
+        goToGameScreen()
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -9,7 +9,7 @@
 import Firebase
 
 class Game {
-    var ID: String!
+    var id: String!
     var userIsCreator: Bool!
     
     let questionsCount = Constants.GameSettings.questionsCount
@@ -25,8 +25,13 @@ class Game {
     var userCorrectAnswersCount = 0
     
     
+    init(id: String, userIsCreator: Bool) {
+        self.id = id
+        self.userIsCreator = userIsCreator
+    }
+    
     // Load lists of random questions, correct and wrong answers
-    func createNewGame() {
+    func loadData(completion: @escaping() -> Void) {
         let db = Firestore.firestore()
 
         db.collection("words").document("categories").getDocument { (snapshot, error) in
@@ -97,6 +102,8 @@ class Game {
                         break
                     }
                 }
+                
+                completion()
             }
         }
     }
