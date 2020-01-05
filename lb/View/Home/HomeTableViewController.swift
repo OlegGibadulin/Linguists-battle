@@ -55,8 +55,26 @@ class HomeTableViewController: UITableViewController {
         nicknameLabel.text = "Привет, " + viewModel.getNickname()
     }
     
+    func showActivityIndicator() {
+        let alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+
+        let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = .medium
+        activityIndicator.startAnimating();
+
+        alert.view.addSubview(activityIndicator)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func hideActivityIndicator() {
+        dismiss(animated: false, completion: nil)
+    }
+    
     // Transition to the game screen
     func goToGameScreen() {
+        showActivityIndicator()
+        
         guard tableView != nil && tableView!.indexPathForSelectedRow != nil else { return }
 
         let index = tableView!.indexPathForSelectedRow!
@@ -75,6 +93,8 @@ class HomeTableViewController: UITableViewController {
             
             let gameViewController =  self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.gameViewController) as? GameViewController
             
+            self.hideActivityIndicator()
+            
             self.view.window?.rootViewController = gameViewController
             self.view.window?.makeKeyAndVisible()
             
@@ -84,7 +104,9 @@ class HomeTableViewController: UITableViewController {
 
     // Find new opponent for game
     @IBAction func findGameTapped(_ sender: Any) {
+        showActivityIndicator()
         viewModel.findGame() {
+            self.hideActivityIndicator()
             self.tableView.reloadData()
         }
     }

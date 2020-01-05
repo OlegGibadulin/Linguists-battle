@@ -137,8 +137,26 @@ class GameViewController: UIViewController {
         }
     }
     
+    func showActivityIndicator() {
+        let alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+
+        let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = .medium
+        activityIndicator.startAnimating();
+
+        alert.view.addSubview(activityIndicator)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func hideActivityIndicator() {
+        dismiss(animated: false, completion: nil)
+    }
+    
     // Transition to the home screen
     @IBAction func goToHomeScreenTapped(_ sender: Any) {
+        showActivityIndicator()
+        
         let user = User(uid: Constants.User.id!)
         
         user.loadData() {
@@ -149,6 +167,8 @@ class GameViewController: UIViewController {
             let homeViewController =  self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeTableViewController) as? HomeTableViewController
             
             homeViewController!.viewModel = homeViewModel
+            
+            self.hideActivityIndicator()
             
             self.view.window?.rootViewController = homeViewController
             self.view.window?.makeKeyAndVisible()
