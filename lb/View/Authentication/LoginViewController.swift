@@ -20,6 +20,7 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var loginButton: UIButton!
     
+    var userID : String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,10 +54,20 @@ class LoginViewController: UIViewController {
     
     // Transition to the home screen
     func goToHomeScreen() {
-        let homeViewController =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeTableViewController) as? HomeTableViewController
+        let user = User(uid: userID)
         
-        view.window?.rootViewController = homeViewController
-        view.window?.makeKeyAndVisible()
+        user.loadData() {
+            let gameContentManager = GameContentManager()
+            
+            let homeViewModel = HomeViewModel(user: user, gameContentManager: gameContentManager)
+            
+            let homeViewController =  self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeTableViewController) as? HomeTableViewController
+            
+            homeViewController!.viewModel = homeViewModel
+            
+            self.view.window?.rootViewController = homeViewController
+            self.view.window?.makeKeyAndVisible()
+        }
     }
 
     @IBAction func loginTapped(_ sender: Any) {
@@ -76,12 +87,13 @@ class LoginViewController: UIViewController {
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             
             if error != nil || result == nil {
-                // error!.localizedDescription
                 self.showError("Неверный email или пароль")
             }
             else {
                 // Store user id
                 Constants.User.id = result!.user.uid
+                
+                self.userID = result!.user.uid
                 
                 // Transition to the home screen
                 self.goToHomeScreen()

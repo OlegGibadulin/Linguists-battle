@@ -51,6 +51,6 @@ class HomeTableViewCell: UITableViewCell {
     
     func setReadyStatus() {
         enable()
-        statusImage.image = UIImage()
+        statusImage.image = UIImage(named: "play")
     }
 }
