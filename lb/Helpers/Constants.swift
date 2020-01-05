@@ -25,5 +25,7 @@ struct Constants {
     struct GameSettings {
         
         static let gameCount = 1
+        static let questionsCount = 2
+        static let wrongAnswersCount = 3
     }
 }
