@@ -339,7 +339,7 @@
                     <connections>
                         <outlet property="goToHomeButton" destination="wr0-8S-fH7" id="cXL-Zm-SbW"/>
                         <outlet property="nextQestionButton" destination="erh-S3-030" id="lp5-Og-HXf"/>
-                        <outlet property="qestionLabel" destination="Nkc-d6-xgJ" id="coa-kJ-pC3"/>
+                        <outlet property="questionLabel" destination="Nkc-d6-xgJ" id="DqZ-8N-Ew3"/>
                         <outletCollection property="answerButtons" destination="8x9-Kw-evL" collectionClass="NSMutableArray" id="GGy-S4-BoO"/>
                         <outletCollection property="answerButtons" destination="V0D-rd-k6o" collectionClass="NSMutableArray" id="jcC-71-p8R"/>
                         <outletCollection property="answerButtons" destination="rjH-m6-6Tz" collectionClass="NSMutableArray" id="DUQ-Wh-gPI"/>

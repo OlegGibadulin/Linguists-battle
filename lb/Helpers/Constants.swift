@@ -17,15 +17,10 @@ struct Constants {
         static let gameViewController = "GameController"
     }
     
-    struct User {
-        
-        static var id: String?
-    }
-    
     struct GameSettings {
         
         static let gameCount = 1
-        static let questionsCount = 2
+        static let questionsCount = 10
         static let wrongAnswersCount = 3
     }
 }

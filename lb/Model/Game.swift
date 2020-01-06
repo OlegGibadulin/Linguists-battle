@@ -11,6 +11,7 @@ import Firebase
 class Game {
     var id: String!
     var userIsCreator: Bool!
+    var userID: String!
     
     let questionsCount = Constants.GameSettings.questionsCount
     var questionsList: [String] = []
@@ -25,9 +26,10 @@ class Game {
     var userCorrectAnswersCount = 0
     
     
-    init(id: String, userIsCreator: Bool) {
+    init(id: String, userIsCreator: Bool, userID: String) {
         self.id = id
         self.userIsCreator = userIsCreator
+        self.userID = userID
     }
     
     // Load lists of random questions, correct and wrong answers

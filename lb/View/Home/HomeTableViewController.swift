@@ -85,8 +85,9 @@ class HomeTableViewController: UITableViewController {
         
         let gameID = viewModel.getGameID(at: index.row)
         let isCreator = viewModel.isCreator(at: index.row)
+        let userID = viewModel.getUserID()
         
-        let game = Game(id: gameID, userIsCreator: isCreator)
+        let game = Game(id: gameID, userIsCreator: isCreator, userID: userID)
         
         game.loadData() {
             let gameViewModel = GameViewModel(game: game)

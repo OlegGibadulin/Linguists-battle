@@ -17,7 +17,7 @@ class GameViewController: UIViewController {
             }
         }
     
-    @IBOutlet weak var qestionLabel: UILabel!
+    @IBOutlet weak var questionLabel: UILabel!
     
     @IBOutlet var answerButtons: [UIButton]!
     
@@ -63,7 +63,7 @@ class GameViewController: UIViewController {
         
         enableAnswerButtons()
         
-        qestionLabel.text = viewModel.getCurQuestion()
+        questionLabel.text = viewModel.getCurQuestion()
         
         // Random answer button
         let correctAnswerInd = viewModel.createCorrectAnswerInd()
@@ -90,6 +90,13 @@ class GameViewController: UIViewController {
         disableAnswerButtons()
         
         nextQestionButton.isHidden = false
+        
+        viewModel.getTranscription(word: viewModel.getCurQuestion()) { transcription in
+            
+            DispatchQueue.main.async {
+                self.questionLabel.text = transcription
+            }
+        }
         
         // Set correct button green
         Utilities.styleCorrectAnswerButton(answerButtons[viewModel.getCorrectAnswerInd()])
@@ -124,7 +131,7 @@ class GameViewController: UIViewController {
             hideElements()
             
             // Display score
-            qestionLabel.text = viewModel.getUserResults()
+            questionLabel.text = viewModel.getUserResults()
             
             // Display button for transition to the home screen
             goToHomeButton.isHidden = false
@@ -157,7 +164,7 @@ class GameViewController: UIViewController {
     @IBAction func goToHomeScreenTapped(_ sender: Any) {
         showActivityIndicator()
         
-        let user = User(uid: Constants.User.id!)
+        let user = User(uid: viewModel.getUserID())
         
         user.loadData() {
             let gameContentManager = GameContentManager()

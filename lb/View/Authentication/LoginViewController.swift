@@ -112,8 +112,6 @@ class LoginViewController: UIViewController {
             }
             else {
                 // Store user id
-                Constants.User.id = result!.user.uid
-                
                 self.userID = result!.user.uid
                 
                 // Transition to the home screen
