@@ -12,7 +12,6 @@ import FirebaseAuth
 
 class SignUpViewController: UIViewController {
     
-    
     @IBOutlet weak var nicknameTextField: UITextField!
     
     @IBOutlet weak var emailTextField: UITextField!
@@ -27,8 +26,7 @@ class SignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
         setUpElements()
     }
     
@@ -63,6 +61,22 @@ class SignUpViewController: UIViewController {
         return nil
     }
     
+    func showActivityIndicator() {
+        let alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+
+        let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = .medium
+        activityIndicator.startAnimating();
+
+        alert.view.addSubview(activityIndicator)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func hideActivityIndicator() {
+        dismiss(animated: false, completion: nil)
+    }
+    
     // Transition to the home screen
     func goToHomeScreen() {
         let user = User(uid: userID)
@@ -76,18 +90,22 @@ class SignUpViewController: UIViewController {
             
             homeViewController!.viewModel = homeViewModel
             
+            self.hideActivityIndicator()
+            
             self.view.window?.rootViewController = homeViewController
             self.view.window?.makeKeyAndVisible()
         }
     }
     
     @IBAction func signUpTapped(_ sender: Any) {
+        showActivityIndicator()
         
         // Check the fields
         let error = checkFields()
         
         guard error == nil else {
             self.showError(error!)
+            hideActivityIndicator()
             return
         }
         
@@ -96,26 +114,27 @@ class SignUpViewController: UIViewController {
         let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        // Create the user
+        // Try to create the user
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
             
             guard error == nil else {
                 self.showError("Ошибка создания аккаунта")
+                self.hideActivityIndicator()
                 return
             }
             
             let db = Firestore.firestore()
             let gamesDict: [[String:Any]] = []
             
+            // Store user data
             db.collection("users").addDocument(data: ["nickname": nickname, "uid": result!.user.uid, "games": gamesDict]) { (error) in
                 
                 if error != nil {
                     self.showError("Ошибка создания аккаунта")
+                    self.hideActivityIndicator()
                 }
                 else {
                     // Store user id
-                    Constants.User.id = result!.user.uid
-                    
                     self.userID = result!.user.uid
                     
                     // Transition to the home screen

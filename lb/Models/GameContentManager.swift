@@ -43,6 +43,7 @@ class GameContentManager {
         }
     }
     
+    // Convert dictionary into GameContent Model
     func getGameContent(from gameData: [String:Any]) -> GameContent {
         return GameContent(
             creatorNickname: gameData["creator_nickname"] as? String,

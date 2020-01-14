@@ -17,7 +17,7 @@ class GameViewController: UIViewController {
             }
         }
     
-    @IBOutlet weak var qestionLabel: UILabel!
+    @IBOutlet weak var questionLabel: UILabel!
     
     @IBOutlet var answerButtons: [UIButton]!
     
@@ -27,8 +27,6 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         
         setUpElements()
         disableAnswerButtons()
@@ -63,7 +61,7 @@ class GameViewController: UIViewController {
         
         enableAnswerButtons()
         
-        qestionLabel.text = viewModel.getCurQuestion()
+        questionLabel.text = viewModel.getCurQuestion()
         
         // Random answer button
         let correctAnswerInd = viewModel.createCorrectAnswerInd()
@@ -90,6 +88,13 @@ class GameViewController: UIViewController {
         disableAnswerButtons()
         
         nextQestionButton.isHidden = false
+        
+        viewModel.getTranscription(word: viewModel.getCurQuestion()) { transcription in
+            
+            DispatchQueue.main.async {
+                self.questionLabel.text = transcription
+            }
+        }
         
         // Set correct button green
         Utilities.styleCorrectAnswerButton(answerButtons[viewModel.getCorrectAnswerInd()])
@@ -124,7 +129,7 @@ class GameViewController: UIViewController {
             hideElements()
             
             // Display score
-            qestionLabel.text = viewModel.getUserResults()
+            questionLabel.text = viewModel.getUserResults()
             
             // Display button for transition to the home screen
             goToHomeButton.isHidden = false
@@ -137,9 +142,27 @@ class GameViewController: UIViewController {
         }
     }
     
+    func showActivityIndicator() {
+        let alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+
+        let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = .medium
+        activityIndicator.startAnimating();
+
+        alert.view.addSubview(activityIndicator)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func hideActivityIndicator() {
+        dismiss(animated: false, completion: nil)
+    }
+    
     // Transition to the home screen
     @IBAction func goToHomeScreenTapped(_ sender: Any) {
-        let user = User(uid: Constants.User.id!)
+        showActivityIndicator()
+        
+        let user = User(uid: viewModel.getUserID())
         
         user.loadData() {
             let gameContentManager = GameContentManager()
@@ -149,6 +172,8 @@ class GameViewController: UIViewController {
             let homeViewController =  self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeTableViewController) as? HomeTableViewController
             
             homeViewController!.viewModel = homeViewModel
+            
+            self.hideActivityIndicator()
             
             self.view.window?.rootViewController = homeViewController
             self.view.window?.makeKeyAndVisible()

@@ -32,7 +32,7 @@ class HomeViewModel {
         }
     }
     
-    func getNickname() -> String {
+    func getUserNickname() -> String {
         return user.nickname
     }
     
@@ -89,6 +89,10 @@ class HomeViewModel {
         return user.gamesIDList[index]
     }
     
+    func getUserID() -> String {
+        return user.id
+    }
+    
     func increaseUserGameCount(at index: Int) {
         
         let gameID = getGameID(at: index)
@@ -136,7 +140,7 @@ class HomeViewModel {
                 // Update list of games id
                 self.user.gamesIDList.insert(foundGameID, at: 0)
                 
-                self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
+                self.db.collection("users").whereField("uid", isEqualTo: self.getUserID()).getDocuments { (snapshot, error) in
                     
                     guard error == nil && snapshot != nil else { return }
                     
@@ -155,7 +159,7 @@ class HomeViewModel {
                     var gameData = snapshot!.data()!
                     
                     gameData["opponent_nickname"] = self.user.nickname
-                    gameData["opponent_uid"] = Constants.User.id!
+                    gameData["opponent_uid"] = self.getUserID()
                     self.db.collection("games").document(foundGameID).setData(gameData, merge: true)
                     
                     let gameContent = self.gameContentManager.getGameContent(from: gameData)
@@ -179,7 +183,7 @@ class HomeViewModel {
                 // Update user's list of games id
                 self.user.gamesIDList.insert(newGameID, at: 0)
                 
-                self.db.collection("users").whereField("uid", isEqualTo: Constants.User.id!).getDocuments { (snapshot, error) in
+                self.db.collection("users").whereField("uid", isEqualTo: self.getUserID()).getDocuments { (snapshot, error) in
                     
                     guard error == nil && snapshot != nil else { return }
                     
@@ -188,7 +192,7 @@ class HomeViewModel {
                     }
                 
                 // Create content of new game
-                let newGameData = ["creator_nickname": self.user.nickname!, "creator_uid": Constants.User.id!, "creator_score": 0, "creator_games_count": 0, "opponent_nickname": "Waiting for opponent", "opponent_uid": "", "opponent_score": 0, "opponent_games_count": 0, "is_creator_turn": true] as [String : Any]
+                let newGameData = ["creator_nickname": self.user.nickname!, "creator_uid": self.getUserID(), "creator_score": 0, "creator_games_count": 0, "opponent_nickname": "Waiting for opponent", "opponent_uid": "", "opponent_score": 0, "opponent_games_count": 0, "is_creator_turn": true] as [String : Any]
                 self.db.collection("games").document(newGameID).setData(newGameData, merge: true)
                 
                 let gameContent = self.gameContentManager.getGameContent(from: newGameData)

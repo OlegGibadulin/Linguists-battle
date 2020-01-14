@@ -19,7 +19,6 @@ class GameViewModel {
         db = Firestore.firestore()
     }
     
-    // Save user score
     func saveUserScore() {
         if game.userIsCreator { self.db.collection("games").document(game.id).setData(["creator_score": game.userCorrectAnswersCount], merge: true)
         } else { self.db.collection("games").document(game.id).setData(["opponent_score": game.userCorrectAnswersCount], merge: true)
@@ -34,6 +33,10 @@ class GameViewModel {
         game.correctAnswerInd = Int.random(in: 0 ..< game.wrongAnswersCount + 1)
         
         return game.correctAnswerInd
+    }
+    
+    func getUserID() -> String {
+        return game.userID
     }
     
     func getCorrectAnswerInd() -> Int {
@@ -66,6 +69,43 @@ class GameViewModel {
     
     func increaseQuestionIndex() {
         game.questionCurInd += 1
+    }
+    
+    func getTranscription(word: String, completion: @escaping(String) -> Void) {
+        
+        let urlString = "https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20200105T200956Z.436ce02f26ecc411.39389ffe12afa6c0e1c03f5cb93f2e486873b33f&lang=en-ru&text=" + word
+        
+        guard let url = URL(string: urlString) else { return }
+        
+        // Get word translations, transcriptions
+        // and examples from Yandex.Dictionary
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            guard let data = data else { return }
+            
+            let desc = String(data: data, encoding: .utf8)
+            let arr = desc!.split(separator: "\"")
+            var transcription = String()
+            
+            // Looking for transcription
+            for i in 0 ..< arr.count {
+                if arr[i] == "ts" {
+                    transcription = String(arr[i + 2])
+                    break
+                }
+            }
+            
+            if transcription == "" {
+                completion(word)
+            } else {
+                completion(transcription)
+            }
+        }.resume()
     }
     
 }

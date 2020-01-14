@@ -24,8 +24,6 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         
         setUpElements()
     }
@@ -52,6 +50,22 @@ class LoginViewController: UIViewController {
         return nil
     }
     
+    func showActivityIndicator() {
+        let alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+
+        let activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.style = .medium
+        activityIndicator.startAnimating();
+
+        alert.view.addSubview(activityIndicator)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func hideActivityIndicator() {
+        dismiss(animated: false, completion: nil)
+    }
+    
     // Transition to the home screen
     func goToHomeScreen() {
         let user = User(uid: userID)
@@ -65,18 +79,22 @@ class LoginViewController: UIViewController {
             
             homeViewController!.viewModel = homeViewModel
             
+            self.hideActivityIndicator()
+            
             self.view.window?.rootViewController = homeViewController
             self.view.window?.makeKeyAndVisible()
         }
     }
 
     @IBAction func loginTapped(_ sender: Any) {
+        showActivityIndicator()
         
         // Check the fields
         let error = checkFields()
         
         guard error == nil else {
             self.showError(error!)
+            hideActivityIndicator()
             return
         }
         
@@ -84,15 +102,15 @@ class LoginViewController: UIViewController {
         let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
+        // Try to sign in
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             
             if error != nil || result == nil {
                 self.showError("Неверный email или пароль")
+                self.hideActivityIndicator()
             }
             else {
                 // Store user id
-                Constants.User.id = result!.user.uid
-                
                 self.userID = result!.user.uid
                 
                 // Transition to the home screen
