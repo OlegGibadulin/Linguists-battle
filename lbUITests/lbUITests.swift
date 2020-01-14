@@ -19,21 +19,6 @@ class lbUITests: XCTestCase {
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
     
-    func testFailureLogin() {
-        
-        let app = XCUIApplication()
-        let loginButton = app.buttons["Login"]
-        loginButton.tap()
-        app.textFields["Email"].tap()
-        
-        let passwordTextField = app.textFields["Password"]
-        passwordTextField.tap()
-        passwordTextField.tap()
-        loginButton.tap()
-        app.staticTexts["Неверный email или пароль"].tap()
-        
-    }
-    
     func testValidLoginSuccess() {
         
         let validEmail = "for@test.ru"
