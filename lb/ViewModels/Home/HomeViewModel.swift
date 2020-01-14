@@ -32,7 +32,7 @@ class HomeViewModel {
         }
     }
     
-    func getNickname() -> String {
+    func getUserNickname() -> String {
         return user.nickname
     }
     

@@ -1,5 +1,5 @@
 //
-//  LoginViewController.swift
+//  SignUpViewController.swift
 //  lb
 //
 //  Created by Mac-HOME on 16.12.2019.
@@ -10,22 +10,22 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-class LoginViewController: UIViewController {
-
+class SignUpViewController: UIViewController {
+    
+    @IBOutlet weak var nicknameTextField: UITextField!
+    
     @IBOutlet weak var emailTextField: UITextField!
     
     @IBOutlet weak var passwordTextField: UITextField!
     
     @IBOutlet weak var errorLabel: UILabel!
     
-    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var signUpButton: UIButton!
     
     var userID : String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         
         setUpElements()
     }
@@ -34,19 +34,28 @@ class LoginViewController: UIViewController {
         
         errorLabel.alpha = 0
         
+        Utilities.styleTextField(nicknameTextField)
         Utilities.styleTextField(emailTextField)
         Utilities.styleTextField(passwordTextField)
-        Utilities.styleFilledButton(loginButton)
+        Utilities.styleFilledButton(signUpButton)
     }
     
     // Check the fields and return error msg
     func checkFields() -> String? {
         
         // Check the fields for emptiness
-        if emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+        if nicknameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+            emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
             
             return "Пожалуйста, заполните все поля"
+        }
+        
+        // Check the password field for correctness
+        let cleanedPassword = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if Utilities.isPasswordValid(cleanedPassword) == false {
+            return "Пожалйста, убедитесь, что ваш пароль состоит не менее чем из 8 символов, содержит цифры и специальный символ"
         }
         
         return nil
@@ -87,8 +96,8 @@ class LoginViewController: UIViewController {
             self.view.window?.makeKeyAndVisible()
         }
     }
-
-    @IBAction func loginTapped(_ sender: Any) {
+    
+    @IBAction func signUpTapped(_ sender: Any) {
         showActivityIndicator()
         
         // Check the fields
@@ -101,21 +110,36 @@ class LoginViewController: UIViewController {
         }
         
         // Get cleaned data
+        let nickname =  nicknameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
+        // Try to create the user
+        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
             
-            if error != nil || result == nil {
-                self.showError("Неверный email или пароль")
+            guard error == nil else {
+                self.showError("Ошибка создания аккаунта")
                 self.hideActivityIndicator()
+                return
             }
-            else {
-                // Store user id
-                self.userID = result!.user.uid
+            
+            let db = Firestore.firestore()
+            let gamesDict: [[String:Any]] = []
+            
+            // Store user data
+            db.collection("users").addDocument(data: ["nickname": nickname, "uid": result!.user.uid, "games": gamesDict]) { (error) in
                 
-                // Transition to the home screen
-                self.goToHomeScreen()
+                if error != nil {
+                    self.showError("Ошибка создания аккаунта")
+                    self.hideActivityIndicator()
+                }
+                else {
+                    // Store user id
+                    self.userID = result!.user.uid
+                    
+                    // Transition to the home screen
+                    self.goToHomeScreen()
+                }
             }
         }
     }

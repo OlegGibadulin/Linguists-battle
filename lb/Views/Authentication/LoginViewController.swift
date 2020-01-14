@@ -1,5 +1,5 @@
 //
-//  SignUpViewController.swift
+//  LoginViewController.swift
 //  lb
 //
 //  Created by Mac-HOME on 16.12.2019.
@@ -10,24 +10,20 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
-class SignUpViewController: UIViewController {
-    
-    @IBOutlet weak var nicknameTextField: UITextField!
-    
+class LoginViewController: UIViewController {
+
     @IBOutlet weak var emailTextField: UITextField!
     
     @IBOutlet weak var passwordTextField: UITextField!
     
     @IBOutlet weak var errorLabel: UILabel!
     
-    @IBOutlet weak var signUpButton: UIButton!
+    @IBOutlet weak var loginButton: UIButton!
     
     var userID : String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         
         setUpElements()
     }
@@ -36,28 +32,19 @@ class SignUpViewController: UIViewController {
         
         errorLabel.alpha = 0
         
-        Utilities.styleTextField(nicknameTextField)
         Utilities.styleTextField(emailTextField)
         Utilities.styleTextField(passwordTextField)
-        Utilities.styleFilledButton(signUpButton)
+        Utilities.styleFilledButton(loginButton)
     }
     
     // Check the fields and return error msg
     func checkFields() -> String? {
         
         // Check the fields for emptiness
-        if nicknameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
-            emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+        if emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
             
             return "Пожалуйста, заполните все поля"
-        }
-        
-        // Check the password field for correctness
-        let cleanedPassword = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        if Utilities.isPasswordValid(cleanedPassword) == false {
-            return "Пожалйста, убедитесь, что ваш пароль состоит не менее чем из 8 символов, содержит цифры и специальный символ"
         }
         
         return nil
@@ -98,8 +85,8 @@ class SignUpViewController: UIViewController {
             self.view.window?.makeKeyAndVisible()
         }
     }
-    
-    @IBAction func signUpTapped(_ sender: Any) {
+
+    @IBAction func loginTapped(_ sender: Any) {
         showActivityIndicator()
         
         // Check the fields
@@ -112,35 +99,22 @@ class SignUpViewController: UIViewController {
         }
         
         // Get cleaned data
-        let nickname =  nicknameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        // Create the user
-        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+        // Try to sign in
+        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             
-            guard error == nil else {
-                self.showError("Ошибка создания аккаунта")
+            if error != nil || result == nil {
+                self.showError("Неверный email или пароль")
                 self.hideActivityIndicator()
-                return
             }
-            
-            let db = Firestore.firestore()
-            let gamesDict: [[String:Any]] = []
-            
-            db.collection("users").addDocument(data: ["nickname": nickname, "uid": result!.user.uid, "games": gamesDict]) { (error) in
+            else {
+                // Store user id
+                self.userID = result!.user.uid
                 
-                if error != nil {
-                    self.showError("Ошибка создания аккаунта")
-                    self.hideActivityIndicator()
-                }
-                else {
-                    // Store user id
-                    self.userID = result!.user.uid
-                    
-                    // Transition to the home screen
-                    self.goToHomeScreen()
-                }
+                // Transition to the home screen
+                self.goToHomeScreen()
             }
         }
     }

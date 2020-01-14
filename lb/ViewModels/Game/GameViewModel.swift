@@ -19,7 +19,6 @@ class GameViewModel {
         db = Firestore.firestore()
     }
     
-    // Save user score
     func saveUserScore() {
         if game.userIsCreator { self.db.collection("games").document(game.id).setData(["creator_score": game.userCorrectAnswersCount], merge: true)
         } else { self.db.collection("games").document(game.id).setData(["opponent_score": game.userCorrectAnswersCount], merge: true)
@@ -78,6 +77,8 @@ class GameViewModel {
         
         guard let url = URL(string: urlString) else { return }
         
+        // Get word translations, transcriptions
+        // and examples from Yandex.Dictionary
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if let error = error {
@@ -91,6 +92,7 @@ class GameViewModel {
             let arr = desc!.split(separator: "\"")
             var transcription = String()
             
+            // Looking for transcription
             for i in 0 ..< arr.count {
                 if arr[i] == "ts" {
                     transcription = String(arr[i + 2])
@@ -98,7 +100,11 @@ class GameViewModel {
                 }
             }
             
-            completion(transcription)
+            if transcription == "" {
+                completion(word)
+            } else {
+                completion(transcription)
+            }
         }.resume()
     }
     
