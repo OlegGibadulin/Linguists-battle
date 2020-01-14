@@ -73,7 +73,7 @@ class GameViewModel {
     
     func getTranscription(word: String, completion: @escaping(String) -> Void) {
         
-        let urlString = "https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20200105T200956Z.436ce02f26ecc411.39389ffe12afa6c0e1c03f5cb93f2e486873b33f&lang=en-ru&text=" + word
+        let urlString = Constants.YandexDictionary.request + word
         
         guard let url = URL(string: urlString) else { return }
         
@@ -100,11 +100,7 @@ class GameViewModel {
                 }
             }
             
-            if transcription == "" {
-                completion(word)
-            } else {
-                completion(transcription)
-            }
+            completion(transcription)
         }.resume()
     }
     

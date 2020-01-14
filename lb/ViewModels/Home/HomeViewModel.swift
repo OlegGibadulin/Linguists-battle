@@ -180,9 +180,16 @@ class HomeViewModel {
                 
                 createdGames.setData(["games_id" : gamesID], merge: true)
                 
-                // Update user's list of games id
+                // Add new game to user's list of games id
                 self.user.gamesIDList.insert(newGameID, at: 0)
                 
+                // Check for game count limit
+                if self.user.gamesIDList.count == 21 {
+                    // Delete game id from user list of games
+                    self.user.gamesIDList.removeLast()
+                }
+                
+                // Update user's list of games id
                 self.db.collection("users").whereField("uid", isEqualTo: self.getUserID()).getDocuments { (snapshot, error) in
                     
                     guard error == nil && snapshot != nil else { return }

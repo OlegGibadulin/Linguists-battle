@@ -19,6 +19,8 @@ class GameViewController: UIViewController {
     
     @IBOutlet weak var questionLabel: UILabel!
     
+    @IBOutlet weak var transcriptionLabel: UILabel!
+    
     @IBOutlet var answerButtons: [UIButton]!
     
     @IBOutlet weak var nextQestionButton: UIButton!
@@ -62,6 +64,7 @@ class GameViewController: UIViewController {
         enableAnswerButtons()
         
         questionLabel.text = viewModel.getCurQuestion()
+        transcriptionLabel.text = ""
         
         // Random answer button
         let correctAnswerInd = viewModel.createCorrectAnswerInd()
@@ -92,7 +95,9 @@ class GameViewController: UIViewController {
         viewModel.getTranscription(word: viewModel.getCurQuestion()) { transcription in
             
             DispatchQueue.main.async {
-                self.questionLabel.text = transcription
+                if transcription != "" {
+                    self.transcriptionLabel.text = transcription
+                }
             }
         }
         
@@ -120,6 +125,7 @@ class GameViewController: UIViewController {
         }
         
         nextQestionButton.isHidden = true
+        transcriptionLabel.text = ""
     }
     
     // Go to next question
