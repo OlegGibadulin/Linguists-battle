@@ -1,6 +1,9 @@
 # The battle of linguists
-Swift application
 
-iOS technopark project
+Linguists battle - это iOS приложение, которое позволяет изучать иностранные слова в формате викторины, соревнуясь с другими игроками.
 
-![Alt text](/prototype-ui.jpg?raw=true "Optional Title")
+![Alt text](/Presentation/Home_screen.png?raw=true "Optional Title")
+
+![Alt text](/Presentation/Game_screen_question.png?raw=true "Optional Title")
+
+![Alt text](/Presentation/Game_screen_answer.png?raw=true "Optional Title")
