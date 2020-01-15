@@ -44,6 +44,11 @@ class HomeTableViewCell: UITableViewCell {
         statusImage.image = UIImage(named: "lose")
     }
     
+    func setDrawStatus() {
+        disable()
+        statusImage.image = UIImage(named: "draw")
+    }
+    
     func setWaitingStatus() {
         disable()
         statusImage.image = UIImage(named: "wait")
