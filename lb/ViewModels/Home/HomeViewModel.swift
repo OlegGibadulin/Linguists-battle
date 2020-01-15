@@ -72,6 +72,14 @@ class HomeViewModel {
         return isCreator(at: index) == creatorScoreIsBigger
     }
     
+    // Check for game score
+    func isDraw(at index: Int) -> Bool {
+        let creatorScore = gamesContentList[index].creatorScore!
+        let opponentScore = gamesContentList[index].opponentScore!
+        
+        return creatorScore == opponentScore
+    }
+    
     func getOpponentNickname(at index: Int) -> String {
         
         var opponentNickname = ""

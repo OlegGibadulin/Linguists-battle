@@ -132,6 +132,8 @@ class HomeTableViewController: UITableViewController {
         if viewModel.isGameOver(at: index) {
             if viewModel.isVictory(at: index) {
                 cell.setVictoryStatus()
+            } else if viewModel.isDraw(at: index) {
+                cell.setDrawStatus()
             } else {
                 cell.setDefeatStatus()
             }
