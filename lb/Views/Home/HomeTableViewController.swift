@@ -130,10 +130,10 @@ class HomeTableViewController: UITableViewController {
         
         // Set game status
         if viewModel.isGameOver(at: index) {
-            if viewModel.isVictory(at: index) {
-                cell.setVictoryStatus()
-            } else if viewModel.isDraw(at: index) {
+            if viewModel.isDraw(at: index) {
                 cell.setDrawStatus()
+            } else if viewModel.isVictory(at: index) {
+                cell.setVictoryStatus()
             } else {
                 cell.setDefeatStatus()
             }
