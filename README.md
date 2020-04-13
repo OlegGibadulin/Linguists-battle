@@ -10,7 +10,7 @@
 
 ## Демонстрация работы
 
-[![Demo CountPages alpha](src/game.gif)](https://youtu.be/QSQzJr68aXE)
+[![asciicast](src/game.jpg)](https://youtu.be/QSQzJr68aXE)
 
 ## Процесс работы
 
